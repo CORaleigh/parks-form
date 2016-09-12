@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <title>Angular Material - Starter App</title>
+  <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,700'>
+  <link rel="stylesheet" href="./jspm_packages/github/angular/bower-material@master/angular-material.css"/>
+  <link rel="stylesheet" href="./assets/app.css"/>
+</head>
+
+<body ng-cloak layout="column" ng-controller="AppController as app">
+
+  <!-- Container #1 (see wireframe) -->
+  <md-toolbar layout="row" class="md-toolbar-tools">
+    <md-button class="menu md-icon-button" hide-gt-sm ng-click="app.toggleList()"
+               aria-label="Show User List">
+      <md-icon md-svg-icon="menu"></md-icon>
+    </md-button>
+    <h1>PRCR Experience - Pricing Form</h1>
+  </md-toolbar>
+
+  <!-- Container #2 -->
+  <div flex layout="row">
+
+    <!-- Container #3 -->
+    <md-sidenav class="md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-sm')"
+                md-component-id="left" ng-click="app.toggleList()">
+      <md-list>
+        <md-list-item>
+          <span>Revenue Estimate</span>
+          <span class="md-secondary">{{app.calcRevenue() | currency:"$"}}</span>
+        </md-list-item>
+        <md-list-item>
+          <span>Cost Estimate</span>
+          <span class="md-secondary">{{app.calcCost() | currency:"$"}}</span>
+        </md-list-item>    
+        <md-list-item>
+          <span>Cost Recovery (target)</span>
+          <span ng-hide="app.checkNaN(app.data.category.value)" class="md-secondary">{{(app.data.category.value * 100).toFixed(0)}}%</span>
+          <span ng-show="app.checkNaN(app.data.category.value)" class="md-secondary">--</span>            
+        </md-list-item> 
+        <md-list-item>
+          <span>Cost Recovery (projected)</span>
+          <span ng-hide="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">{{((app.revenueEstimate / app.costEstimate) * 100).toFixed(0)}}%</span>
+          <span ng-show="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">--</span>          
+        </md-list-item>     
+                                          
+      </md-list>
+      <md-toolbar layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.category.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.category.value}">
+        <div class="md-toolbar-tools">
+          <span>{{((app.revenueEstimate / app.costEstimate) < app.data.category.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value) ? 'Needs Review' : 'Proceed'}}</span>
+        </div>
+      </md-toolbar>
+    </md-sidenav>
+
+    <!-- Container #4 -->
+    <md-content flex id="content">
+    <div ng-cloak>
+      <md-content>
+        <form novalidate name="parkForm">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="app.selectedTab">
+          <md-tab label="instructions">
+            <md-content class="md-padding">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+            </md-content>
+          </md-tab>
+          <md-tab label="general information">
+            <md-content>
+                <md-input-container class="md-block" >
+                  <label>Program Area</label>
+                  <md-select ng-required="true" ng-model="app.data.target">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="target in app.targets" ng-value="target">
+                      {{target.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+            
+                <md-input-container class="md-block" >
+                  <label>Program Title</label>
+                  <input ng-required="true" ng-model="app.data.title" placeholder="What is your program called?">
+                </md-input-container>
+     
+                <md-input-container class="md-block" >
+                  <label>Category of Service</label>
+                  <md-select ng-required="true" ng-model="app.data.category">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="category in app.data.target.services" ng-value="category">
+                      {{category.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+              
+                <md-input-container class="md-block" >
+                  <label>Facility Name</label>
+                  <input ng-required="true" ng-model="app.data.facility" placeholder="Where will your program take place?">
+                </md-input-container>
+              <md-input-container class="md-block">
+                <label>Start Date</label>
+                <md-datepicker ng-model="app.data.start" name="dateField"></md-datepicker>
+              </md-input-container>
+                <md-input-container class="md-block" >
+                  <label>Prepared By</label>
+                  <input ng-required="true" ng-model="app.data.preparer" placeholder="Who is filling out this form?">
+                </md-input-container>
+      
+                <md-input-container class="md-block" >
+                  <label>Comments</label>
+                  <input ng-model="app.data.comments" placeholder="Enter any comments">
+                </md-input-container>
+            </md-content>
+          </md-tab>
+          <md-tab label="revenue estimates">
+            <md-content class="md-padding">
+              <div flex-gt-sm="50" layout="row">
+                <md-checkbox ng-model="app.data.newProgram" aria-label="Is this a new program?">
+                  Is this a new program?
+                </md-checkbox>
+                <md-checkbox ng-model="app.data.full" aria-label="Is this Program is Usually Full?">
+                  Is this Program is Usually Full?
+                </md-checkbox>                
+              </div>           
+              <h2>Program Length</h2>
+                <md-input-container >
+                  <label>Hours Per Week</label>
+                  <input ng-required="true" ng-min="0" type="number" ng-model="app.data.hours" placeholder="">
+                </md-input-container>
+
+                <md-input-container class="">
+                  <label>Length of Program in Weeks</label>
+                  <div layout="row">
+                    <div flex>
+                      <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.weeks" placeholder="">
+                    </div>
+                    <div flex>
+                      <md-button class="md-icon-button" >
+                        <md-tooltip>for 1-day classes, the length of the class should be 1 week</md-tooltip>
+                        <md-icon md-svg-icon="feedback"></md-icon>
+                      </md-button>
+                    </div>
+                  </div>
+                </md-input-container>
+              <div>  
+                  <strong>Total Hours</strong>
+                  <span ng-hide="app.checkNaN(app.data.weeks * app.data.hours)">{{app.data.weeks * app.data.hours}}</span>
+                  <span ng-show="app.checkNaN(app.data.weeks * app.data.hours)">--</span>        
+              </div>  
+              <h2>Participants Estimate</h2>
+                <md-input-container class="" >
+                  <label>Minimum # of Participants</label>
+                  <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.minParticipants" placeholder="">
+                </md-input-container>
+                <md-input-container class="" >
+                  <label>Maximum # of Participants</label>
+                  <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.maxParticipants" placeholder="">
+                </md-input-container>
+              <h2>Fee Estimate</h2>
+                <md-input-container class="" >
+                  <label>Resident Rate</label>
+                  <input ng-required="true" ng-min="0" ng-change="app.residentialRateChanged(app.data.residentialRate)" type="number" ng-model="app.data.residentialRate" placeholder="">
+                </md-input-container>
+              <div>  
+                  <label>Non-Resident Rate</label>
+                  <span>{{app.data.nonResidentialRate}}</span>
+              </div>              
+              <h2>Alternative Revenue Source</h2>              
+                <md-input-container class="md-block" >
+                  <label>Description</label>
+                  <input ng-model="app.data.altRevDesc" placeholder="">
+                </md-input-container>
+  
+                <md-input-container class="" >
+                  <label>Amount</label>
+                  <input ng-min="0" type="number" ng-model="app.data.altRevAmt" placeholder="">
+                </md-input-container>
+            </md-content>
+          </md-tab>
+          <md-tab label="cost estimates">
+            <md-content class="md-padding">
+              <h2>Supplies</h2>
+                <md-input-container class="md-block" >
+                  <label>Description</label>
+                  <input ng-model="app.data.supplyDesc" placeholder="">
+                </md-input-container>
+                <md-input-container class="" >
+                  <label>Amount</label>
+                  <div layout="row">
+                    <div flex>
+                      <input ng-min="0" type="number" ng-model="app.data.supplyAmt" placeholder="">
+                    </div>
+                    <div flex>
+                      <md-button class="md-icon-button" >
+                        <md-tooltip>supply fees that are either paid directly to the instructor or that are<br/> used to purchase a specific supply that is directly given to the student<br/> (such as clay, or an instructional book), that is not included in the split,<br/> should not be included in Cost Estimates</md-tooltip>
+                        <md-icon md-svg-icon="feedback"></md-icon>
+                      </md-button>
+                    </div>
+                  </div>
+                </md-input-container>
+              <h2>Personnel Types</h2>
+              <md-button class="md-raised md-primary" ng-click="app.addPersonnel()">Add</md-button>
+              <md-card ng-repeat="type in app.data.personnel">
+                <!-- <md-card-title> -->
+                    <md-input-container class="md-block" >
+                      <label>Job Title</label>
+                      <md-select ng-required="true" ng-model="app.data.personnel[$index].title">
+                        <md-option><em>None</em></md-option>
+                        <md-option ng-repeat="job in app.jobs" ng-value="job.name">
+                          {{job.name}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" >
+                      <label>Pay Type</label>
+                      <md-select ng-required="true" ng-model="app.data.personnel[$index].payType">
+                        <md-option><em>None</em></md-option>
+                        <md-option ng-repeat="type in app.payTypes" ng-value="type.name">
+                          {{type.name}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" >
+                      <label>Status</label>
+                      <md-select ng-required="true" ng-model="app.data.personnel[$index].status">
+                        <md-option><em>None</em></md-option>
+                        <md-option ng-repeat="status in app.statuses" ng-value="status.name">
+                          {{status.name}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                    <md-input-container class="" >
+                      <label>Pay Rate</label>
+                      <input ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].rate" placeholder="">
+                    </md-input-container> 
+                    <md-input-container class="" >
+                      <label>Personnel Count</label>
+                      <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].count" placeholder="">
+                    </md-input-container>
+              <!--   </md-card-title> -->
+                <md-card-actions layout="row" layout-align="end center">
+                  <md-button class="md-warn md-raised" ng-click="app.removePersonnel($index)">Remove</md-button>
+                </md-card-actions>
+              </md-card>
+            </md-content>
+          </md-tab>
+          <md-tab label="summary">
+            <md-content class="md-padding">
+              {{app.data}}
+              <br/>
+              <md-button ng-disabled="parkForm.$invalid" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
+              <md-button class="md-warn md-raised" ng-click="app.clear()">Clear</md-button>                            
+            </md-content>
+          </md-tab>   
+          <md-tab label="history" md-on-select="app.getHistory()">
+            <md-content class="md-padding">
+              <md-card ng-repeat="entry in app.history">
+                <md-card-title>
+                  <md-card-title-text>
+                    {{entry._id}}
+                    <div layout="row" layout-padding="1em" layout-wrap>
+                      <md-input-container class="" >
+                        <label>Title</label>
+                        <br/>
+                        <p>{{entry.title}}</p>
+                      </md-input-container>
+                     <md-input-container class="" >
+                        <label>Facility</label>
+                        <br/>
+                        <p>{{entry.facility}}</p>
+                      </md-input-container>                      
+                      <md-input-container class="" >
+                        <label>Program Area</label>
+                        <br/>
+                        <p>{{entry.programArea}}</p>
+                      </md-input-container>
+                      <md-input-container class="" >
+                        <label>Category</label>
+                        <br/>
+                        <p>{{entry.category.name}}</p>
+                      </md-input-container>
+                    </div>
+                    <div layout="row" layout-padding="1em" layout-wrap>
+                      <md-input-container class="" >
+                        <label>Submitted</label>
+                        <br/>
+                        <p>{{entry.submitted | date: 'short'}}</p>
+                      </md-input-container>
+                      <md-input-container class="" >
+                        <label>Prepared By</label>
+                        <br/>
+                        <p>{{entry.preparer}}</p>
+                      </md-input-container>                                              
+                    </div>
+                    <div layout="row" layout-padding="1em" layout-wrap>
+                      <md-input-container class="" >
+                        <label>Revenue Estimate</label>
+                        <br/>
+                        <p>{{entry.revenue | currency: '$'}}</p>
+                      </md-input-container>
+                      <md-input-container class="" >
+                        <label>Cost Estimate</label>
+                        <br/>
+                        <p>{{entry.cost | currency: '$'}}</p>
+                      </md-input-container>
+                      <md-input-container class="" >
+                        <label>Cost Recovery (Target)</label>
+                        <br/>
+                        <p>{{(entry.recoveryTarget * 100).toFixed(0)}}%</p>
+                      </md-input-container>
+                      <md-input-container class="" >
+                        <label>Cost Recovery (Projected)</label>
+                        <br/>
+                        <p>{{(entry.recoveryProjected * 100).toFixed(0)}}%</p>
+                      </md-input-container>                                                             
+                    </div>                    
+                    <md-button class="md-raised" ng-class="{'md-warn': entry.needsReview, 'md-primary': !entry.needsReview}">{{entry.needsReview ? 'Needs Review' : 'Proceed'}}</md-button>
+                  </md-card-title-text>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                  <md-button class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
+                </md-card-actions>
+              </md-card>                                             
+            </md-list>              
+            </md-content>
+          </md-tab>                        
+        </md-tabs>
+        </form>
+      </md-content>
+    </div>
+    </md-content>
+  </div>
+
+  <script src="./jspm_packages/system.js" type="text/javascript"></script>
+  <script src="config.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    System
+        .import('src/boot/boot')
+        .catch( console.error.bind(console) ); // make sure any errors print to console
+  </script>
+
+</body>
+</html>
