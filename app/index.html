@@ -51,7 +51,7 @@
       </md-list>
       <md-toolbar ng-hide="parkForm.$invalid" layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.category.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.category.value}">
         <div class="md-toolbar-tools">
-          <span ng-show="parkForm.$invalid">{{((app.revenueEstimate / app.costEstimate) < app.data.category.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value) ? 'Needs Review' : 'Proceed'}}</span>
+          <span>{{((app.revenueEstimate / app.costEstimate) < app.data.category.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value) ? 'Needs Review' : 'Proceed'}}</span>
         </div>
       </md-toolbar>
       <md-toolbar ng-show="parkForm.$invalid" layout="row" class="md-warn">
