@@ -118,7 +118,7 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     return value;
   }
   self.submit = function () {
-    var url = "http://localhost:8080/api/form/"
+    var url = "http://mapstest.raleighnc.gov/parks-form-api/form/"
     if (self.id) {
       url += self.id
     }
@@ -156,7 +156,7 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     });
   }
   self.getHistory = function () {
-    $http.get("http://localhost:8080/api/form").then(function (results) {
+    $http.get("http://mapstest.raleighnc.gov/parks-form-api/form").then(function (results) {
       self.history = results.data;
     });
   }
