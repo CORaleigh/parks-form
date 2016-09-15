@@ -79,8 +79,8 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
   }
   self.calcRevenue = function () {
     var value = self.data.residentialRate * self.data.minParticipants;
-    if (self.data.full)
-      value = self.data.residentialRate * ((self.data.minParticipants + self.data.maxParticipants)/2);
+    // if (self.data.full)
+    //   value = self.data.residentialRate * ((self.data.minParticipants + self.data.maxParticipants)/2);
     if (isNaN(value)) {
       value = 0;
     }
@@ -94,11 +94,15 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     var value = 0;
     for (var i = 0;i < self.data.personnel.length;i++) {
       personnel = self.data.personnel[i];
+
       if (personnel.payType === 'Hourly') {
-        value += personnel.rate * FICA * personnel.count * (self.data.weeks * self.data.hours);
+        value += personnel.rate * personnel.count * (self.data.weeks * self.data.hours);
       } else if (personnel.payType === 'Per Student') {
-        value += personnel.rate * FICA * personnel.count * self.data.minParticipants;        
+        value += personnel.rate * personnel.count * self.data.minParticipants;        
       }
+      if (personnel.status === "Payroll") {
+        value *= FICA;
+      }  
     }
     if (isNaN(value)) {
       value = 0;
@@ -122,7 +126,7 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
         { programArea: self.data.target.name,
           title: self.data.title,
           category: self.data.category,
-          facility: self.data.facility,
+          facility: self.data.facility.name,
           start: self.data.start,
           preparer: self.data.preparer,
           comments: self.data.comments,
@@ -147,7 +151,7 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
           recoveryTarget: self.data.category.value
         }
     ).then(function (response) {
-      self.selectedTab = 5;
+      self.selectedTab = 4;
       self.id = response.data.message._id;
     });
   }
@@ -190,307 +194,307 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
   "name": "Active Adults",
   "services": [{
     "name": "Senior Advanced",
-    "value": 0.06
+    "value": 0.75
   }, {
     "name": "Senior Beginner",
-    "value": 0.18
+    "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.40
+    "value": 0.25
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.00
+    "value": 0.05
   }, {
     "name": "Trips",
-    "value": 0.56
+    "value": 1.00
   }]
 }, {
   "name": "Aquatics",
   "services": [{
     "name": "Adult Advanced",
-    "value": 0.40
+    "value": 0.75
   }, {
     "name": "Adult Beginner",
-    "value": 0.17
+    "value": 0.50
   }, {
     "name": "Private/Semi Private Lesson",
-    "value": 0.25
+    "value": 1.00
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.20
+    "value": 0.05
   }, {
     "name": "Youth Advanced",
-    "value": 0.27
+    "value": 0.75
   }, {
     "name": "Youth Beginner",
-    "value": 0.53
+    "value": 0.25
   }, {
     "name": "Youth Leagues",
-    "value": 0.53
+    "value": 0.50
   }]
 }, {
   "name": "Art Centers",
   "services": [{
     "name": "Adult Advanced",
-    "value": 1.00
+    "value": 0.75
   }, {
     "name": "Adult Beginner",
-    "value": 1.19
+    "value": 0.50
   }, {
     "name": "Merchandise for Resale",
-    "value": 1.07
+    "value": 1.00
   }, {
     "name": "Private/Semi Private Lesson",
-    "value": 0.20
+    "value": 1.00
   }, {
     "name": "Senior Beginner",
-    "value": 0.51
+    "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.07
+    "value": 0.25
   }, {
     "name": "Specialty Camps",
-    "value": 0.87
+    "value": 0.75
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.02
+    "value": 0.05
   }, {
     "name": "Trips",
-    "value": 0.26
+    "value": 1.00
   }, {
     "name": "Youth Beginner",
-    "value": 0.50
+    "value": 0.25
   }]
 }, {
   "name": "Athletics",
   "services": [{
     "name": "Adult League",
-    "value": 0.21
+    "value": 0.50
   }, {
     "name": "Adult Tournament",
+    "value": 1.00
+  }, {
+    "name": "Staffed Park/Facility Usage",
     "value": 0.05
   }, {
-    "name": "Staffed Park/Facility Usag",
-    "value": 0.00
-  }, {
     "name": "Youth Beginner",
-    "value": 0.07
+    "value": 0.25
   }, {
     "name": "Youth League",
-    "value": 0.26
+    "value": 0.50
   }]
 }, {
   "name": "Camp Ranoca",
   "services": [{
     "name": "School Calender based Programs/General Camps",
-    "value": 0.68
+    "value": 0.50
   }, {
     "name": "Specialty Camps",
-    "value": 0.23
+    "value": 0.75
   }]
 }, {
   "name": "Community Centers",
   "services": [{
     "name": "Adult Advanced",
-    "value": 0.20
+    "value": 0.75
   }, {
     "name": "Adult Beginner",
-    "value": 0.94
+    "value": 0.50
   }, {
     "name": "Adult Leagues",
-    "value": 0.26
+    "value": 0.50
   }, {
     "name": "Adult Tournaments",
-    "value": 0.09
+    "value": 1.00
   }, {
     "name": "Mixed Age/Family Muli-level",
-    "value": 0.09
+    "value": 0.50
   }, {
     "name": "Private/Semi Private Lesson",
-    "value": 0.28
+    "value": 1.00
   }, {
     "name": "School Calender based Programs/General Camps",
-    "value": 0.28
+    "value": 0.50
   }, {
     "name": "Senior Beginner",
-    "value": 0.07
+    "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.03
+    "value": 0.25
   }, {
     "name": "Specialty Camps",
-    "value": 1.15
+    "value": 0.75
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.01
+    "value": 0.05
   }, {
     "name": "Trips",
-    "value": 0.01
+    "value": 1.00
   }, {
     "name": "Youth Advanced",
-    "value": 0.10
+    "value": 0.75
   }, {
     "name": "Youth Beginner",
-    "value": 1.15
+    "value": 1.25
   }, {
     "name": "Youth Leagues",
-    "value": 0.08
+    "value": 0.50
   }, {
     "name": "Youth Tournaments",
-    "value": 0.00
+    "value": 0.50
   }]
 }, {
   "name": "ESL Programs",
   "services": [{
     "name": "Adult Beginner",
-    "value": 0.01
+    "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.00
+    "value": 0.25
   }, {
     "name": "Youth Beginner",
-    "value": 0.00
+    "value": 0.25
   }]
 }, {
   "name": "Historic Resources and Museums",
   "services": [{
     "name": "Attractions",
-    "value": 2.21
+    "value": 0.50
   }, {
     "name": "Consessions and Vending",
-    "value": 0.88
+    "value": 0.75
   }, {
     "name": "Merchandise for Resale",
-    "value": 1.16
+    "value": 1.10
   }, {
     "name": "School Calender based Programs/General Camps",
-    "value": 0.03
+    "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.09
+    "value": 0.25
   }, {
     "name": "Specialty Camps",
-    "value": 0.59
+    "value": 0.75
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.00
+    "value": 0.05
   }]
 }, {
   "name": "Nature Camp",
   "services": [{
     "name": "Adult Beginner",
-    "value": 0.01
+    "value": 0.50
   }, {
     "name": "Mixed Age/Family Muli-level",
-    "value": 0.14
+    "value": 0.50
   }, {
     "name": "Youth Beginner",
-    "value": 0.04
+    "value": 0.25
   }]
 }, {
   "name": "Nature Centers",
   "services": [{
     "name": "Adult Advanced",
-    "value": 0.00
+    "value": 0.75
   }, {
     "name": "Adult Beginner",
-    "value": 0.04
+    "value": 0.50
   }, {
     "name": "Mixed Age/Family Muli-level",
-    "value": 0.05
+    "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.00
+    "value": 0.25
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.00
+    "value": 0.05
   }, {
     "name": "Youth Beginner",
-    "value": 0.23
+    "value": 0.25
   }]
 }, {
   "name": "Nature Programs",
   "services": [{
     "name": "Adult Beginner",
-    "value": 0.00
+    "value": 0.50
   }, {
     "name": "Mixed Age/Family Muli-level",
-    "value": 0.00
+    "value": 0.50
   }, {
     "name": "Youth Beginner",
-    "value": 0.06
+    "value": 0.25
   }]
 }, {
   "name": "Outdoor Rec & Lakes",
   "services": [{
     "name": "Adult Beginner",
-    "value": 0.39
+    "value": 0.50
   }, {
     "name": "Merchandise for Resale",
-    "value": 1.42
+    "value": 1.40
   }, {
     "name": "Mixed Age/Family Muli-level",
-    "value": 0.02
+    "value": 0.50
   }, {
     "name": "Private/Semi Private Lesson",
-    "value": 0.04
+    "value": 1.00
   }, {
     "name": "School Calender based Programs/General Camps",
-    "value": 0.03
+    "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.00
+    "value": 0.25
   }, {
     "name": "Specialty Camps",
-    "value": 0.36
+    "value": 0.75
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.04
+    "value": 0.05
   }, {
     "name": "Trips",
-    "value": 0.07
+    "value": 1.00
   }, {
     "name": "Youth Beginner",
-    "value": 0.09
+    "value": 0.25
   }]
 }, {
   "name": "Pullen Amusements",
   "services": [{
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.48
+    "value": 0.25
   }]
 }, {
   "name": "School Based Programs",
   "services": [{
     "name": "School Calender based Programs/General Camps",
-    "value": 0.73
+    "value": 0.50
   }]
 }, {
   "name": "Specialized Recreation",
   "services": [{
     "name": "Adult Advanced",
-    "value": 0.01
+    "value": 0.75
   }, {
     "name": "Adult Beginner",
-    "value": 0.07
+    "value": 0.50
   }, {
     "name": "Inclusion Services",
     "value": 0.14
   }, {
     "name": "Mixed Age/Family Muli-level",
-    "value": 0.06
+    "value": 0.50
   }, {
     "name": "School Calender based Programs/General Camps",
-    "value": 0.59
+    "value": 0.50
   }, {
     "name": "Specialty Camps",
-    "value": 0.14
+    "value": 0.75
   }, {
     "name": "Trips",
-    "value": 0.09
+    "value": 1.00
   }, {
     "name": "Youth Beginner",
-    "value": 0.02
+    "value": 0.25
   }]
 }, {
   "name": "Teen Programs",
@@ -499,72 +503,165 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     "value": 0.50
   }, {
     "name": "Small-Scale/Large-Scale Special Events",
-    "value": 0.00
+    "value": 0.25
   }, {
     "name": "Specialty Camps",
-    "value": 0.29
+    "value": 0.75
   }, {
     "name": "Youth Beginner",
-    "value": 0.04
+    "value": 0.25
   }]
 }, {
   "name": "Tennis",
   "services": [{
     "name": "Adult Advanced",
-    "value": 2.64
+    "value": 0.75
   }, {
     "name": "Adult Beginner",
-    "value": 1.22
+    "value": 0.50
   }, {
     "name": "Adult Leagues",
-    "value": 0.19
+    "value": 0.50
   }, {
     "name": "Merchandise for Resale",
-    "value": 0.65
+    "value": 0.60
   }, {
     "name": "Private/Semi Private Lesson",
-    "value": 0.81
+    "value": 1.00
   }, {
     "name": "Staffed Park/Facility Usage",
-    "value": 0.00
+    "value": 0.05
   }, {
     "name": "Youth Advanced",
-    "value": 0.78
+    "value": 0.75
   }, {
     "name": "Youth Beginner",
-    "value": 0.85
+    "value": 0.25
   }, {
     "name": "Youth Leagues",
-    "value": 0.10
+    "value": 0.50
   }, {
     "name": "Youth Tournaments",
-    "value": 1.21
+    "value": 0.50
   }]
 }, {
   "name": "VHIP",
   "services": [{
     "name": "Adult Beginner",
-    "value": 0.17
+    "value": 0.50
   }, {
     "name": "Adult Leagues",
-    "value": 0.16
+    "value": 0.50
   }, {
     "name": "Mixed Age/Family Muli-level",
-    "value": 0.16
+    "value": 0.50
   }, {
     "name": "Trips",
-    "value": 0.26
+    "value": 1.00
   }]
 }, {
   "name": "Youth Programs",
   "services": [{
     "name": "School Calender based Programs/General Camps",
-    "value": 0.21
+    "value": 0.50
   }, {
     "name": "Specialty Camps",
-    "value": 0.47
+    "value": 0.75
   }]
-}];  
+}]; 
+
+self.facilities = [
+{name: "Abbotts Creek Community Center"},
+{name: "Anderson Point"},
+{name: "Anne Gordon Center for Active Adults"},
+{name: "Annie Louise Wilkerson Nature Preserve"},
+{name: "Baileywick Park"},
+{name: "Barwell Road Community Center"},
+{name: "Beaver Dam Creek Park"},
+{name: "Biltmore Hills Community Center"},
+{name: "Biltmore Pool"},
+{name: "Brentwood Park"},
+{name: "Brier Creek Community Center"},
+{name: "Brookhaven Nature Park"},
+{name: "Buffaloe Rd Aquatic Center"},
+{name: "Buffaloe Road Athletic Park"},
+{name: "Carolina Pines Community Center"},
+{name: "Cedar Hills Park"},
+{name: "Chavis Carousel"},
+{name: "Chavis Community Center"},
+{name: "Chavis Pool"},
+{name: "City Plaza"},
+{name: "Compiegne Park"},
+{name: "Durant Nature Preserve"},
+{name: "Eastgate Park"},
+{name: "Eliza Pool Park"},
+{name: "Fallon Park"},
+{name: "Five Points Center for Active Adults"},
+{name: "Fletcher Park"},
+{name: "Frank E Evans Administrative Bldg."},
+{name: "Gardner Park"},
+{name: "Glen Eden Park"},
+{name: "Green Road Community Center"},
+{name: "Greystone Community Center"},
+{name: "Halifax Community Center"},
+{name: "Hill Street Center"},
+{name: "Honeycutt Park"},
+{name: "Horseshoe Farm Nature Preserve"},
+{name: "Isabella Cannon"},
+{name: "Jaycee Community Center"},
+{name: "John P 'Top' Greene Center"},
+{name: "Kentwood Park"},
+{name: "Kiwanis Park"},
+{name: "Lake Johnson"},
+{name: "Lake Johnson Pool"},
+{name: "Lake Lynn Community Center"},
+{name: "Lake Wheeler"},
+{name: "Laurel Hills Community Center"},
+{name: "Lions Park Community Center"},
+{name: "Longview Pool"},
+{name: "Magnolia Cottage"},
+{name: "Marsh Creek Maintenance"},
+{name: "Marsh Creek Park"},
+{name: "Method Road Community Center"},
+{name: "Millbrook Exchange Community Center"},
+{name: "Millbrook Pool"},
+{name: "Millbrook Tennis Center"},
+{name: "Moore Square"},
+{name: "Mordecai Historic Park"},
+{name: "Nash Square"},
+{name: "Non-City Owned Site"},
+{name: "North Hills Park"},
+{name: "Northeast Outreach Center"},
+{name: "Oakwood Park"},
+{name: "Optimist Community Center"},
+{name: "Optimist Pool"},
+{name: "Peach Road"},
+{name: "Powell Drive Park"},
+{name: "Pullen Amusements"},
+{name: "Pullen Aquatic Center"},
+{name: "Pullen Arts Center"},
+{name: "Pullen Community Center"},
+{name: "Pullen Park Tennis Courts"},
+{name: "Raleigh City Museum"},
+{name: "Raleigh Little Theater"},
+{name: "Ralph Campbell Community Center"},
+{name: "Ridge Road Pool"},
+{name: "Roberts Park Community Center"},
+{name: "Sanderford Road Park"},
+{name: "Sertoma Arts Center"},
+{name: "Sgt. Courtney T. Johnson Center"},
+{name: "Shelley Lake"},
+{name: "Spring Forest Road Park"},
+{name: "St. Monica  Teen Center"},
+{name: "Tarboro Road Community Center"},
+{name: "Tucker House"},
+{name: "Walnut Creek Wetland Center"},
+{name: "Walnut Terrace Neighborhood Center"},
+{name: "WCSC (Walnut Creek Softball Complex"},
+{name: "Wilkerson Nature Preserve"},
+{name: "Williams Park"},
+{name: "Worthdale Community Center"}
+];
   // Load all registered users
 
   UsersDataService

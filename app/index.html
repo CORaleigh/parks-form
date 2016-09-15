@@ -6,7 +6,7 @@
   <meta name="description" content="">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-  <title>Angular Material - Starter App</title>
+  <title>PRCR Experience - Pricing Form</title>
   <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,700'>
   <link rel="stylesheet" href="./jspm_packages/github/angular/bower-material@master/angular-material.css"/>
   <link rel="stylesheet" href="./assets/app.css"/>
@@ -27,7 +27,7 @@
   <div flex layout="row">
 
     <!-- Container #3 -->
-    <md-sidenav class="md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-sm')"
+    <md-sidenav class="md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-xs')"
                 md-component-id="left" ng-click="app.toggleList()">
       <md-list>
         <md-list-item>
@@ -47,14 +47,26 @@
           <span>Cost Recovery (projected)</span>
           <span ng-hide="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">{{((app.revenueEstimate / app.costEstimate) * 100).toFixed(0)}}%</span>
           <span ng-show="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">--</span>          
-        </md-list-item>     
-                                          
+        </md-list-item>                        
       </md-list>
-      <md-toolbar layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.category.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.category.value}">
+      <md-toolbar ng-hide="parkForm.$invalid" layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.category.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.category.value}">
         <div class="md-toolbar-tools">
-          <span>{{((app.revenueEstimate / app.costEstimate) < app.data.category.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value) ? 'Needs Review' : 'Proceed'}}</span>
+          <span ng-show="parkForm.$invalid">{{((app.revenueEstimate / app.costEstimate) < app.data.category.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value) ? 'Needs Review' : 'Proceed'}}</span>
         </div>
       </md-toolbar>
+      <md-toolbar ng-show="parkForm.$invalid" layout="row" class="md-warn">
+        <div class="md-toolbar-tools">
+          <span ng-show="parkForm.$invalid">Incomplete</span>
+        </div>
+      </md-toolbar>      
+      <br/>
+      <div>
+        <md-button style="width:95%" ng-disabled="parkForm.$invalid" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
+        <md-tooltip>All required fields must be entered before submitting</md-tooltip>
+      </div>
+      <div>
+        <md-button style="width:95%" class="md-warn md-raised" ng-click="app.clear()">Clear</md-button>       
+      </div>
     </md-sidenav>
 
     <!-- Container #4 -->
@@ -72,7 +84,7 @@
             <md-content>
                 <md-input-container class="md-block" >
                   <label>Program Area</label>
-                  <md-select ng-required="true" ng-model="app.data.target">
+                  <md-select ng-required="true" ng-model="app.data.target" ng-change="app.data.category = null">
                     <md-option><em>None</em></md-option>
                     <md-option ng-repeat="target in app.targets" ng-value="target">
                       {{target.name}}
@@ -96,8 +108,15 @@
                 </md-input-container>
               
                 <md-input-container class="md-block" >
+
                   <label>Facility Name</label>
-                  <input ng-required="true" ng-model="app.data.facility" placeholder="Where will your program take place?">
+<!--                   <input ng-required="true" ng-model="app.data.facility" placeholder="Where will your program take place?"> -->
+                 <md-select ng-required="true" ng-model="app.data.facility">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="facility in app.facilities" ng-value="facility">
+                      {{facility.name}}
+                    </md-option>
+                  </md-select>                  
                 </md-input-container>
               <md-input-container class="md-block">
                 <label>Start Date</label>
@@ -246,14 +265,13 @@
               </md-card>
             </md-content>
           </md-tab>
-          <md-tab label="summary">
+<!--           <md-tab label="summary">
             <md-content class="md-padding">
               {{app.data}}
               <br/>
-              <md-button ng-disabled="parkForm.$invalid" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
-              <md-button class="md-warn md-raised" ng-click="app.clear()">Clear</md-button>                            
+                            
             </md-content>
-          </md-tab>   
+          </md-tab>    -->
           <md-tab label="history" md-on-select="app.getHistory()">
             <md-content class="md-padding">
               <md-card ng-repeat="entry in app.history">
@@ -332,7 +350,6 @@
     </div>
     </md-content>
   </div>
-
   <script src="./jspm_packages/system.js" type="text/javascript"></script>
   <script src="config.js" type="text/javascript"></script>
   <script type="text/javascript">
