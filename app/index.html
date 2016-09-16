@@ -84,7 +84,7 @@
             <md-content>
                 <md-input-container class="md-block" >
                   <label>Program Area</label>
-                  <md-select ng-required="true" ng-model="app.data.target" ng-change="app.data.category = null">
+                  <md-select ng-required="true" ng-model="app.data.target" ng-change="app.data.category = null;app.targetSelected = true">
                     <md-option><em>None</em></md-option>
                     <md-option ng-repeat="target in app.targets" ng-value="target">
                       {{target.name}}
@@ -99,17 +99,17 @@
      
                 <md-input-container class="md-block" >
                   <label>Category of Service</label>
-                  <md-select ng-required="true" ng-model="app.data.category">
+                  <md-select ng-required="true" ng-model="app.data.category" ng-disabled="!app.targetSelected">
                     <md-option><em>None</em></md-option>
                     <md-option ng-repeat="category in app.data.target.services" ng-value="category">
                       {{category.name}}
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <md-checkbox ng-model="app.cityFacility" aria-label="Is this a City facility?" ng-change="app.data.facility = null">
+                <md-checkbox ng-model="app.data.cityFacility" aria-label="Is this a City facility?" ng-change="app.data.facility = null">
                   Is this a City facility?
                 </md-checkbox>              
-                <md-input-container ng-if="app.cityFacility" class="md-block" >
+                <md-input-container ng-if="app.data.cityFacility" class="md-block" >
                   <label>Facility Name</label>
 <!--                   <input ng-required="true" ng-model="app.data.facility" placeholder="Where will your program take place?"> -->
                  <md-select ng-required="true" ng-model="app.data.facility">
@@ -119,7 +119,7 @@
                     </md-option>
                   </md-select>                  
                 </md-input-container>
-                <md-input-container ng-if="!app.cityFacility" class="md-block" >
+                <md-input-container ng-if="!app.data.cityFacility" class="md-block" >
                   <label>Facility Name</label>
                   <input ng-required="true" ng-model="app.data.facility.name" placeholder="Enter the facility name">
                 </md-input-container>                
@@ -189,7 +189,7 @@
                 </md-input-container>
               <div>  
                   <label>Non-Resident Rate</label>
-                  <span>{{app.data.nonResidentialRate}}</span>
+                  <span>{{app.data.nonResidentialRate | currency: '$'}}</span>
               </div>              
               <h2>Alternative Revenue Source</h2>              
                 <md-input-container class="md-block" >
