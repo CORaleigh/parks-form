@@ -67,7 +67,6 @@
       <div>
         <md-button style="width:95%" class="md-warn md-raised" ng-click="app.clear()">Clear</md-button>       
       </div>
-      {{app.data}}
     </md-sidenav>
 
     <!-- Container #4 -->
@@ -107,7 +106,7 @@
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <md-checkbox ng-model="app.cityFacility" aria-label="Is this a City facility?">
+                <md-checkbox ng-model="app.cityFacility" aria-label="Is this a City facility?" ng-change="app.data.facility = null">
                   Is this a City facility?
                 </md-checkbox>              
                 <md-input-container ng-if="app.cityFacility" class="md-block" >
@@ -293,21 +292,24 @@
           </md-tab>    -->
           <md-tab label="history" md-on-select="app.getHistory()">
             <md-content class="md-padding">
-              <md-card ng-repeat="entry in app.history">
+              <md-card class="history-card" ng-repeat="entry in app.history">
+               <md-toolbar md-scroll-shrink ng-if="true">
+                  <div class="md-toolbar-tools">
+                    <h3 ng-click="app.togglePersonnel(type, $index)">
+                        {{entry.title}} at {{entry.facility}} ({{entry.start | date: 'M/d/yyyy'}})
+                    </h3>
+    <!--                   <span flex></span>
+                      <md-button class="md-icon-button" ng-click="app.togglePersonnel(type, $index)">
+                        <md-icon md-svg-icon="up" class="arrow" ng-class="{'rotated': type.visible, 'not-rotated': !type.visible}" ng-animate="{enter: 'rotate', leave: 'not-rotated'}"  ></md-icon>
+                      </md-button>  --> 
+                      <span flex></span> 
+                      <md-button class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>     
+                  </div>
+                </md-toolbar>              
                 <md-card-title>
                   <md-card-title-text>
-                    {{entry._id}}
-                    <div layout="row" layout-padding="1em" layout-wrap>
-                      <md-input-container class="" >
-                        <label>Title</label>
-                        <br/>
-                        <p>{{entry.title}}</p>
-                      </md-input-container>
-                     <md-input-container class="" >
-                        <label>Facility</label>
-                        <br/>
-                        <p>{{entry.facility}}</p>
-                      </md-input-container>                      
+
+                    <div layout="row"  layout-wrap>
                       <md-input-container class="" >
                         <label>Program Area</label>
                         <br/>
@@ -317,9 +319,7 @@
                         <label>Category</label>
                         <br/>
                         <p>{{entry.category.name}}</p>
-                      </md-input-container>
-                    </div>
-                    <div layout="row" layout-padding="1em" layout-wrap>
+                      </md-input-container>                    
                       <md-input-container class="" >
                         <label>Submitted</label>
                         <br/>
@@ -331,7 +331,7 @@
                         <p>{{entry.preparer}}</p>
                       </md-input-container>                                              
                     </div>
-                    <div layout="row" layout-padding="1em" layout-wrap>
+                    <div layout="row"  layout-wrap>
                       <md-input-container class="" >
                         <label>Revenue Estimate</label>
                         <br/>
@@ -356,9 +356,6 @@
                     <md-button class="md-raised" ng-class="{'md-warn': entry.needsReview, 'md-primary': !entry.needsReview}">{{entry.needsReview ? 'Needs Review' : 'Proceed'}}</md-button>
                   </md-card-title-text>
                 </md-card-title>
-                <md-card-actions layout="row" layout-align="end center">
-                  <md-button class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
-                </md-card-actions>
               </md-card>                                             
             </md-list>              
             </md-content>

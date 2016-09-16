@@ -183,3 +183,7 @@ label {
 .arrow.not-rotated {
   transform: rotate(180deg);
 }
+
+.history-card > md-card-title {
+  padding: 0px 16px 16px 16px !important;
+}
