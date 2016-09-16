@@ -67,6 +67,7 @@
       <div>
         <md-button style="width:95%" class="md-warn md-raised" ng-click="app.clear()">Clear</md-button>       
       </div>
+      {{app.data}}
     </md-sidenav>
 
     <!-- Container #4 -->
@@ -106,9 +107,10 @@
                     </md-option>
                   </md-select>
                 </md-input-container>
-              
-                <md-input-container class="md-block" >
-
+                <md-checkbox ng-model="app.cityFacility" aria-label="Is this a City facility?">
+                  Is this a City facility?
+                </md-checkbox>              
+                <md-input-container ng-if="app.cityFacility" class="md-block" >
                   <label>Facility Name</label>
 <!--                   <input ng-required="true" ng-model="app.data.facility" placeholder="Where will your program take place?"> -->
                  <md-select ng-required="true" ng-model="app.data.facility">
@@ -118,6 +120,10 @@
                     </md-option>
                   </md-select>                  
                 </md-input-container>
+                <md-input-container ng-if="!app.cityFacility" class="md-block" >
+                  <label>Facility Name</label>
+                  <input ng-required="true" ng-model="app.data.facility.name" placeholder="Enter the facility name">
+                </md-input-container>                
               <md-input-container class="md-block">
                 <label>Start Date</label>
                 <md-datepicker ng-model="app.data.start" name="dateField"></md-datepicker>

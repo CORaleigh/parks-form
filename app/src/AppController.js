@@ -12,6 +12,7 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
   self.selectUser   = selectUser;
   self.toggleList   = toggleUsersList;
   self.selectedTab = 1;
+  self.cityFacility = true;
   self.jobs = [
             {name: 'Afterschool Counselor'},
             {name: 'Afterschool Director'},
