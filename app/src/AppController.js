@@ -62,17 +62,23 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
         ];
   self.payTypes = [{name: "Per Student"},{name: "Hourly"}];  
   self.statuses = [{name: "Contractor"},{name: "Payroll"}];    
-  self.data = {target: {}, personnel: [{}], full: false, newProgram: false, comments: ''};
+  self.data = {target: {}, personnel: [{visible: true, cost: null}], full: false, newProgram: false, comments: ''};
   self.costEstimate = 0;
   self.revenueEstimate = 0;
   self.checkNaN = function (value) {
     return isNaN(value) || !isFinite(value);
   }
   self.addPersonnel = function () {
-    self.data.personnel.push({});
+    self.data.personnel.unshift({});
+    for (var i = 0;i < self.data.personnel.length;i++) {
+      self.data.personnel[i].visible = (i === 0);
+    }
   }
   self.removePersonnel = function (id) {
     self.data.personnel.splice(id, 1);
+    if (self.data.personnel.length > 0) {
+      self.data.personnel[0].visible = true;
+    }
   }
   self.residentialRateChanged = function (rate) {
     self.data.nonResidentialRate = (rate <= 15) ? rate : rate + 15;
@@ -94,15 +100,16 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     var value = 0;
     for (var i = 0;i < self.data.personnel.length;i++) {
       personnel = self.data.personnel[i];
-
+      personnel.cost = null;
       if (personnel.payType === 'Hourly') {
-        value += personnel.rate * personnel.count * (self.data.weeks * self.data.hours);
+        personnel.cost = personnel.rate * personnel.count * (self.data.weeks * self.data.hours);
       } else if (personnel.payType === 'Per Student') {
-        value += personnel.rate * personnel.count * self.data.minParticipants;        
+        personnel.cost = personnel.rate * personnel.count * self.data.minParticipants;        
       }
       if (personnel.status === "Payroll") {
-        value *= FICA;
-      }  
+        personnel.cost *= FICA;
+      } 
+      value += personnel.cost; 
     }
     if (isNaN(value)) {
       value = 0;
@@ -190,6 +197,14 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     self.id = null;
     self.selectedTab = 1;
   }
+  self.togglePersonnel = function (personnel, index) {
+    personnel.visible = !personnel.visible;
+    for (var i = 0; i < self.data.personnel.length; i++) {
+      if (i != index) {
+        self.data.personnel[i].visible = false;
+      }
+    }
+  };
   self.targets = [{
   "name": "Active Adults",
   "services": [{

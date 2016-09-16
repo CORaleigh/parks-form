@@ -222,7 +222,19 @@
               <h2>Personnel Types</h2>
               <md-button class="md-raised md-primary" ng-click="app.addPersonnel()">Add</md-button>
               <md-card ng-repeat="type in app.data.personnel">
-                <!-- <md-card-title> -->
+              <md-toolbar md-scroll-shrink ng-if="true">
+                <div class="md-toolbar-tools">
+                  <h3 ng-click="app.togglePersonnel(type, $index)">
+                    <span>{{type.title}} <span ng-if="type.count">({{type.count}})</span> <span ng-if="type.cost">- {{type.cost | currency: '$'}}</span></span>
+                  </h3>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="app.togglePersonnel(type, $index)">
+                      <md-icon md-svg-icon="up" class="arrow" ng-class="{'rotated': type.visible, 'not-rotated': !type.visible}" ng-animate="{enter: 'rotate', leave: 'not-rotated'}"  ></md-icon>
+                    </md-button>        
+                </div>
+              </md-toolbar>
+              <div ng-if="type.visible" class="personnelContent"">  
+                <md-card-content>
                     <md-input-container class="md-block" >
                       <label>Job Title</label>
                       <md-select ng-required="true" ng-model="app.data.personnel[$index].title">
@@ -258,10 +270,11 @@
                       <label>Personnel Count</label>
                       <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].count" placeholder="">
                     </md-input-container>
-              <!--   </md-card-title> -->
+                </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
                   <md-button class="md-warn md-raised" ng-click="app.removePersonnel($index)">Remove</md-button>
                 </md-card-actions>
+                </div>
               </md-card>
             </md-content>
           </md-tab>

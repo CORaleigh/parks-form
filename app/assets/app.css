@@ -142,3 +142,44 @@ md-input-container {
 label {
   white-space: normal !important;
 }
+
+
+    /* The starting CSS styles for the enter animation */
+.personnelContent.ng-enter {
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 500ms ease-out, opacity 300ms ease-out;    
+    overflow: hidden;
+}
+
+/* The finishing CSS styles for the enter animation */
+.personnelContent.ng-enter.ng-enter-active {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* now the element will fade out before it is removed from the DOM */
+.personnelContent.ng-leave {
+    max-height: 500px;
+    opacity: 1;
+    transition: max-height 500ms ease-in, opacity 300ms ease-in;  
+    overflow: hidden;
+}
+.personnelContent.ng-leave.ng-leave-active {
+  max-height: 0;
+  opacity: 0;
+}
+
+.arrow {
+    -webkit-transition: 1s ease all;
+    -moz-transition: 1s ease all;
+    -o-transition: 1s ease all;
+    transition: 1s ease all;
+}
+
+.arrow.rotated {
+  transform: rotate(0deg);
+}
+.arrow.not-rotated {
+  transform: rotate(180deg);
+}
