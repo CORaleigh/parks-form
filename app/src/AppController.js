@@ -152,14 +152,13 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     }, 2000);
   }
   self.selectEntry = function (entry) {
-    //self.data.programArea = $filter('filter')(self.targets, entry.programArea);
     self.id = entry._id;
     self.data.target = $filter('filter')(self.targets, entry.programArea)[0];
     self.data.category = $filter('filter')(self.data.target.services, entry.category)[0];
     self.data.title = entry.title;
     self.data.start = new Date(entry.start);
     self.data.cityFacility = entry.cityFacility;
-    self.data.facility = {name: entry.facility};
+    self.data.facility = $filter('filter')(self.facilities, entry.facility)[0];    
     self.data.preparer = entry.preparer;
     self.data.comments = entry.comments;
     self.data.newProgram = entry.newProgram;
@@ -176,6 +175,7 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     self.data.supplyDesc = entry.supplyDesc;
     self.data.personnel = entry.personnel;
     self.selectedTab = 1;
+    self.targetSelected = true;
   }
   self.clear = function () {
     self.data = {target: {}, personnel: [{}], full: false, newProgram: false, comments: '', facility: ''};
