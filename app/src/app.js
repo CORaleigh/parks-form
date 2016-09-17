@@ -9,7 +9,7 @@ import AppController from 'src/AppController';
 import Users from 'src/users/Users';
 
 export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', Users.name ] )
-  .config(($mdIconProvider, $mdThemingProvider) => {
+  .config(($mdIconProvider, $mdThemingProvider, $httpProvider) => {
     // Register the user `avatar` icons
     $mdIconProvider
       .defaultIconSet("./assets/svg/avatars.svg", 128)
@@ -26,5 +26,6 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', Users
     $mdThemingProvider.theme('default')
       .primaryPalette('green')
       .accentPalette('blue');
+    $httpProvider.defaults.headers.delete = { 'Accept' : 'application/json' };
   })
   .controller('AppController', AppController);

@@ -187,3 +187,10 @@ label {
 .history-card > md-card-title {
   padding: 0px 16px 16px 16px !important;
 }
+
+.history-card > md-toolbar {
+  background-color: rgba(80,80,80, 0.9);
+}
+.personnelCard > md-toolbar {
+  background-color: rgba(80,80,80, 0.9);
+}

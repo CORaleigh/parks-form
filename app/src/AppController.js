@@ -83,11 +83,12 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     self.costEstimate = value;
     return value;
   }
-  self.submit = function () {
+  self.submit = function (isCopy) {
     var url = "http://mapstest.raleighnc.gov/parks-form-api/form/"
     if (self.id) {
       url += self.id
     }
+    console.log(self.data);
       $http.post(url, 
         { programArea: self.data.target.name,
           title: self.data.title,
@@ -118,7 +119,12 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
           recoveryTarget: self.data.category.value
         }
     ).then(function (response) {
-      self.selectedTab = 4;
+      if (isCopy) {
+        self.selectedTab = 1;
+      } else {
+        self.selectedTab = 4;
+      }
+      
       self.id = response.data.message._id;
     });
   }
@@ -126,6 +132,24 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $scope, $ti
     $http.get("http://mapstest.raleighnc.gov/parks-form-api/form").then(function (results) {
       self.history = results.data;
     });
+  }
+  self.deleteEntry = function (entry) {
+    $http({
+        method: 'DELETE',
+        url: 'http://mapstest.raleighnc.gov/parks-form-api/form',
+        data: {id: entry._id},
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
+    }).then(function (results) {
+      console.log(results);
+      self.getHistory();
+    });     
+  }  
+  self.copyEntry = function (entry) {
+    self.selectEntry(entry);   
+    self.id = null;
+    $timeout(function (){
+      self.submit(true);
+    }, 2000);
   }
   self.selectEntry = function (entry) {
     //self.data.programArea = $filter('filter')(self.targets, entry.programArea);

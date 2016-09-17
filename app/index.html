@@ -226,7 +226,7 @@
                 </md-input-container>
               <h2>Personnel Types</h2>
               <md-button class="md-raised md-primary" ng-click="app.addPersonnel()">Add</md-button>
-              <md-card ng-repeat="type in app.data.personnel">
+              <md-card ng-repeat="type in app.data.personnel" class="personnelCard">
               <md-toolbar md-scroll-shrink ng-if="true">
                 <div class="md-toolbar-tools">
                   <h3 ng-click="app.togglePersonnel(type, $index)">
@@ -302,7 +302,9 @@
                       <md-button class="md-icon-button" ng-click="app.togglePersonnel(type, $index)">
                         <md-icon md-svg-icon="up" class="arrow" ng-class="{'rotated': type.visible, 'not-rotated': !type.visible}" ng-animate="{enter: 'rotate', leave: 'not-rotated'}"  ></md-icon>
                       </md-button>  --> 
-                      <span flex></span> 
+                      <span flex></span>
+                      <md-button class="md-raised md-warn" ng-click="app.deleteEntry(entry)">Delete</md-button>                       
+                      <md-button class="md-raised" ng-click="app.copyEntry(entry)">Copy</md-button>                      
                       <md-button class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>     
                   </div>
                 </md-toolbar>              
