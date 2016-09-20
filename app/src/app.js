@@ -4,12 +4,15 @@ import angular from 'angular';
 import 'angular-animate';
 import 'angular-aria';
 import 'angular-material';
+import 'angular-ui-router';
 
 import AppController from 'src/AppController';
+import AdminController from 'src/AdminController';
+import MainController from 'src/MainController';
 import Users from 'src/users/Users';
 
-export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', Users.name ] )
-  .config(($mdIconProvider, $mdThemingProvider, $httpProvider) => {
+export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.router', Users.name ] )
+  .config(($mdIconProvider, $mdThemingProvider, $httpProvider, $stateProvider, $urlRouterProvider) => {
     // Register the user `avatar` icons
     $mdIconProvider
       .defaultIconSet("./assets/svg/avatars.svg", 128)
@@ -26,6 +29,43 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', Users
     $mdThemingProvider.theme('default')
       .primaryPalette('green')
       .accentPalette('blue');
-    $httpProvider.defaults.headers.delete = { 'Accept' : 'application/json' };
+    $httpProvider.defaults.headers.delete = { 'Accept' : 'application/json' }; 
+    $urlRouterProvider.otherwise('/form');
+    $stateProvider
+    
+    .state('form', {
+        url: '/form',
+        templateUrl: './templates/main.html'
+    })
+    .state('form.id', {
+        url: '/:id',
+        templateUrl: './templates/main.html'     
+    })    
+    .state('admin', {
+        url: '/admin',
+        templateUrl: './templates/admin.html'     
+    })
+    .state('admin.tab', {
+        url: '/:tab',
+        templateUrl: './templates/admin.html'     
+    });
   })
-  .controller('AppController', AppController);
+  .controller('AppController', AppController)
+  .controller('AdminController', AdminController)
+  .controller('MainController', MainController)
+  .factory('location', [
+    '$location',
+    '$route',
+    '$rootScope',
+    function ($location, $route, $rootScope) {
+        $location.skipReload = function () {
+            var lastRoute = $route.current;
+            var un = $rootScope.$on('$locationChangeSuccess', function () {
+                $route.current = lastRoute;
+                un();
+            });
+            return $location;
+        };
+        return $location;
+    }
+]);  

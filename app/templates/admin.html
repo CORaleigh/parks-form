@@ -1,0 +1,73 @@
+  <div flex layout="row" ng-controller="AdminController as admin">
+    <md-tabs id="adminTabs" md-dynamic-height md-border-bottom md-stretch-tabs="always" md-selected="admin.selectedTab">
+          <md-tab label="facilities" md-on-select="admin.tabSelected(0)">
+            <md-content class="md-padding">
+              <md-list>
+              	<md-list-item>{{facility.name}}
+	                <md-input-container style="width: 100%">
+	                  <input  ng-model="admin.newFacility" placeholder="Enter a new facility name" aria-label="Enter a new facility name">
+	                </md-input-container>
+	                <md-button style="height: 38px" class="md-primary md-raised md-secondary" ng-click="admin.addFacility()">Add</md-button>	   
+	            </md-list-item>              
+              	<md-list-item class="secondary-button-padding"  ng-repeat="facility in admin.facilities | orderBy: 'name'"  ng-click="null">{{facility.name}}
+              		<md-button class="md-warn md-raised md-secondary" ng-click="admin.showConfirm(ev, 'facility', facility)">Delete</md-button>	</md-list-item>
+              </md-list>
+            </md-content>          
+          </md-tab>
+          <md-tab label="target areas" md-on-select="admin.tabSelected(1)">
+            <md-content class="md-padding">
+            	<md-list>
+	           		<md-list-item>
+		                <md-input-container style="width: 100%">
+		                  <input  ng-model="admin.newTarget" placeholder="Enter a new target area" aria-label="Enter a new target area">
+		                </md-input-container>
+		                <md-button style="height: 38px" class="md-primary md-raised md-secondary" ng-click="admin.addTarget()">Add</md-button>	   
+		            </md-list-item>
+	            	<div ng-repeat="target in admin.targets | orderBy: 'name'">
+				        <md-subheader class="md-no-sticky">
+				        	<md-list-item class="secondary-button-padding">
+				                <h2>{{target.name}}</h2>		                
+				                <md-button style="height: 38px" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm(ev, 'target', target)">Delete</md-button>	   
+				            </md-list-item>	
+				        </md-subheader>
+		           		<md-list-item class="secondary-button-padding">
+			                <md-input-container style="width: 100%">
+			                  <input  ng-model="app.data.newServiceName" placeholder="Enter a new service name" aria-label="Enter a new service name">
+			                </md-input-container>
+			                <md-input-container style="width: 100%">
+			                  <input  ng-model="app.data.newServiceValue" placeholder="Enter a new service value" aria-label="Enter a new service value">
+			                </md-input-container>			                
+			                <md-button style="height: 38px" class="md-primary md-raised md-secondary" ng-click="admin.addService()">Add</md-button>	   
+			            </md-list-item>				        
+		           		<md-list-item class="secondary-button-padding" ng-repeat="service in target.services" ng-click="">
+			                <md-input-container style="width: 100%">
+			                  <input  ng-model="service.name" aria-label="{{service.name}}">
+			                </md-input-container>
+			                <md-input-container style="width: 100%">
+			                  <input  ng-model="service.value" aria-label="{{service.value}}">
+			                </md-input-container>
+			                <md-button style="height: 38px" class="md-warn md-raised md-secondary" ng-click="admin.deleteService()">Delete</md-button>	
+			                <md-button style="height: 38px" class="md-primary md-raised md-secondary" ng-click="admin.updateService()">Update</md-button>				                			                	
+						</md-list-item>	
+				    </div>
+            	</md-list>
+            </md-content>          
+          </md-tab>  
+          <md-tab label="personnel types" md-on-select="admin.tabSelected(2)">
+            <md-content class="md-padding">
+              <md-list>
+              	<md-list-item class="secondary-button-padding">{{job.name}}
+	                <md-input-container style="width: 100%">
+	                  <input  ng-model="admin.newJob" placeholder="Enter a new personnel type">
+	                </md-input-container>
+	                <md-button style="height: 38px" class="md-primary md-raised md-secondary" ng-click="admin.addJob()">Add</md-button>	   
+	            </md-list-item>              
+              	<md-list-item class="secondary-button-padding" ng-repeat="job in admin.jobs | orderBy: 'name'" ng-click="null">{{job.name}}
+              		<md-button class="md-warn md-raised md-secondary" ng-click="admin.showConfirm(ev, 'job', job)">Delete</md-button>	</md-list-item>
+              </md-list>
+            </md-content>          
+          </md-tab>                 
+    </md-tabs>
+
+  </div>
+  
