@@ -35,11 +35,30 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     if (self.newTarget) {
       var url = "http://mapstest.raleighnc.gov/parks-form-api/targets";
       $http.post(url, {name: self.newTarget}).then(function (response) {
-        self.targets.push({name: self.newTarget});
+        self.targets.push({name: self.newTarget, _id: response.data._id, services: []});
         self.newTarget = null;
       });      
     }
   }
+  self.addService = function (target) {
+    if (target.newServiceName && target.newServiceValue) {
+      var url = "http://mapstest.raleighnc.gov/parks-form-api/targets/" + target._id;
+      $http.post(url, {name: target.newServiceName, value: target.newServiceValue}).then(function (response) {
+        target.services.push({name: target.newServiceName, value: target.newServiceValue});
+        target.newServiceName = null;
+        target.newServiceValue = null;
+      });
+    }
+  }  
+  self.updateService = function (service) {
+      var url = "http://mapstest.raleighnc.gov/parks-form-api/targets/service/" + service._id;
+      $http.post(url, {name: service.name, value: service.value}).then(function (response) {
+        //self.targets.push({name: self.newTarget});
+        //self.newTarget = null;
+      });      
+    
+  }  
+  
   self.addJob = function () {
     if (self.newJob) {
       var url = "http://mapstest.raleighnc.gov/parks-form-api/jobs";
@@ -50,7 +69,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     }
   }
 
-  self.showConfirm = function(ev, type, item) {
+  self.showConfirm = function(ev, type, item, item2) {
     var confirm = $mdDialog.confirm()
           .title('Would you like to delete ' + type + ': ' + item.name + '?')
           .ariaLabel('Delete')
@@ -68,6 +87,9 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
         break;
         case 'job':
           self.deleteJob(item);
+        break;
+        case 'service':
+          self.deleteService(item, item2)
         break;
       }
     }, function() {
@@ -104,9 +126,19 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
         data: {id: target._id},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
-      var index = self.facilities.indexOf(target);
+      var index = self.targets.indexOf(target);
       self.targets.splice(index, 1);
     });     
-  }            
+  }  
+  self.deleteService = function (service, target) {
+    $http({
+        method: 'DELETE',
+        url: 'http://mapstest.raleighnc.gov/parks-form-api/targets/service/' + service._id,
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
+    }).then(function (results) {
+      var index = target.services.indexOf(service);
+      target.services.splice(index, 1);
+    }); 
+  }              
 }
 export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$stateParams', '$state', '$mdDialog',AdminController ];
