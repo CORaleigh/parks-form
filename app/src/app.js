@@ -26,8 +26,8 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.r
       .icon("phone", "./assets/svg/phone.svg", 24)
       .icon("feedback", "./assets/svg/ic_feedback_black_24px.svg", 24)
       .icon("down", "./assets/svg/ic_keyboard_arrow_down_white_24px.svg", 24)
-      .icon("up", "./assets/svg/ic_keyboard_arrow_up_white_24px.svg", 24);            
-
+      .icon("up", "./assets/svg/ic_keyboard_arrow_up_white_24px.svg", 24)          
+      .icon("more", "./assets/svg/more_vert.svg", 24); 
     $mdThemingProvider.theme('default')
       .primaryPalette('green')
       .accentPalette('blue');

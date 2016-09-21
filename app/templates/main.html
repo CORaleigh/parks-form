@@ -1,6 +1,6 @@
   <div flex layout="row" ng-controller="MainController as app">
     <!-- Container #3 -->
-    <md-sidenav class="md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-xs')"
+    <md-sidenav class="md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-sm')"
                 md-component-id="left" ng-click="app.toggleList()">
       <md-list>
         <md-list-item>
@@ -260,15 +260,37 @@
           <md-tab label="history" md-on-select="app.getHistory()">
             <md-content class="md-padding">
               <md-card class="history-card" ng-repeat="entry in app.history">
-               <md-toolbar layout-wrap md-scroll-shrink ng-if="true">
+               <md-toolbar layout-wrap ng-if="true">
                   <div layout="row" class="md-toolbar-tools">
                     <h3 ng-click="app.togglePersonnel(type, $index)">
                         {{entry.title}} at {{entry.facility}} ({{entry.start | date: 'M/d/yyyy'}})
                     </h3>
                       <span flex></span>
-                      <md-button ng-if="app.user.admin || app.user.email === entry.preparer" class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
-                      <md-button class="md-raised" ng-click="app.copyEntry(entry)">Copy</md-button>                      
-                      <md-button class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>     
+                        <md-button  ng-show="$mdMedia('gt-sm')" ng-if="app.user.admin || app.user.email === entry.preparer" class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
+                        <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.copyEntry(entry)">Copy</md-button>                      
+                        <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
+                        <md-menu ng-hide="$mdMedia('gt-sm')">
+                          <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                            <md-icon md-menu-origin md-svg-icon="more"></md-icon>
+                          </md-button>
+                          <md-menu-content>
+                              <md-menu-item ng-if="app.user.admin || app.user.email === entry.preparer">
+                                <md-button ng-class="md-warn" ng-click="app.showConfirm($event, entry)">
+                                Delete
+                                </md-button>
+                              </md-menu-item>
+                              <md-menu-item>
+                                <md-button ng-click="app.copyEntry(entry)">
+                                Copy
+                                </md-button>
+                              </md-menu-item>
+                              <md-menu-item>
+                                <md-button ng-click="app.selectEntry(entry)">
+                                Select                              
+                                </md-button>
+                            </md-menu-item>
+                          </md-menu-content>
+                        </md-menu>
                   </div>
                 </md-toolbar>              
                 <md-card-title>

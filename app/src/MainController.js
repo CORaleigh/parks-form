@@ -4,12 +4,13 @@
  * @param $mdSidenav
  * @constructor
  */
-function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope, $timeout, $state, $stateParams, $mdDialog) {
+function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,$scope, $timeout, $state, $stateParams, $mdDialog, $mdMedia) {
   var self = this;
   if (!$stateParams.user) {
     $state.go('login');
     return false;
   }
+
   self.user = $stateParams.user;
   $rootScope.$emit("UserAuthenticated", self.user);
 
@@ -22,6 +23,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
   self.data = {preparer: self.user.email, target: {}, personnel: [{visible: true, cost: null}], cityFacility: true, full: false, newProgram: false, comments: ''};
   self.costEstimate = 0;
   self.revenueEstimate = 0;  
+  $scope.$mdMedia = $mdMedia;
   //get Facilities, Targets, and Jobs from database
   $http.get("http://mapstest.raleighnc.gov/parks-form-api/targets").then(function (result) {
     self.targets = result.data;
@@ -249,4 +251,4 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     }
   };
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$state', '$stateParams', '$mdDialog', MainController ];
+export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$rootScope', '$scope',  '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', MainController ];

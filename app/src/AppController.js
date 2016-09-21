@@ -4,7 +4,7 @@
  * @param $mdSidenav
  * @constructor
  */
-function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope, $timeout, $location, $state) {
+function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope, $scope, $timeout, $location, $state, $mdMedia) {
   var self = this;
   $rootScope.$on("UserAuthenticated", function(e, user){
     self.user = user;
@@ -25,5 +25,6 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,
   self.toggleList = function () {
     $mdSidenav('left').toggle();
   };
+  $scope.$mdMedia = $mdMedia
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', AppController ];
+export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$rootScope', '$scope', '$timeout', '$location', '$state', '$mdMedia', AppController ];
