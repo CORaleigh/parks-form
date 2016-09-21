@@ -9,6 +9,8 @@ import 'angular-ui-router';
 import AppController from 'src/AppController';
 import AdminController from 'src/AdminController';
 import MainController from 'src/MainController';
+import LoginController from 'src/LoginController';
+import SignupController from 'src/SignupController';
 import Users from 'src/users/Users';
 
 export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.router', Users.name ] )
@@ -30,9 +32,16 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.r
       .primaryPalette('green')
       .accentPalette('blue');
     $httpProvider.defaults.headers.delete = { 'Accept' : 'application/json' }; 
-    $urlRouterProvider.otherwise('/form');
+    $urlRouterProvider.otherwise('/login');
     $stateProvider
-    
+    .state('login', {
+      url: '/login', 
+      templateUrl: './templates/login.html'
+    })
+    .state('signup', {
+      url: '/signup', 
+      templateUrl: './templates/signup.html'
+    })    
     .state('form', {
         url: '/form',
         templateUrl: './templates/main.html'
@@ -53,6 +62,8 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.r
   .controller('AppController', AppController)
   .controller('AdminController', AdminController)
   .controller('MainController', MainController)
+  .controller('LoginController', LoginController)
+  .controller('SignupController', SignupController)    
   .factory('location', [
     '$location',
     '$route',
