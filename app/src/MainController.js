@@ -4,15 +4,22 @@
  * @param $mdSidenav
  * @constructor
  */
-function MainController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $state, $stateParams, $mdDialog) {
+function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope, $timeout, $state, $stateParams, $mdDialog) {
   var self = this;
+  if (!$stateParams.user) {
+    $state.go('login');
+    return false;
+  }
+  self.user = $stateParams.user;
+  $rootScope.$emit("UserAuthenticated", self.user);
+
   var FICA = 1.0765;
   self.selected     = null;
   self.selectedTab = 0;
   self.cityFacility = true;
   self.payTypes = [{name: "Per Student"},{name: "Hourly"}];  
   self.statuses = [{name: "Contractor"},{name: "Payroll"}];    
-  self.data = {target: {}, personnel: [{visible: true, cost: null}], cityFacility: true, full: false, newProgram: false, comments: ''};
+  self.data = {preparer: self.user.email, target: {}, personnel: [{visible: true, cost: null}], cityFacility: true, full: false, newProgram: false, comments: ''};
   self.costEstimate = 0;
   self.revenueEstimate = 0;  
   //get Facilities, Targets, and Jobs from database
@@ -109,7 +116,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $scope, $t
           cityFacility: self.data.cityFacility,
           facility: self.data.facility.name,
           start: self.data.start,
-          preparer: self.data.preparer,
+          preparer: self.user.email,
           comments: self.data.comments,
           newProgram: self.data.newProgram,
           minParticipants: self.data.minParticipants,
@@ -206,7 +213,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $scope, $t
     self.data.start = new Date(entry.start);
     self.data.cityFacility = entry.cityFacility;
     self.data.facility = $filter('filter')(self.facilities, entry.facility)[0];    
-    self.data.preparer = entry.preparer;
+    self.data.preparer = self.user.email;//entry.preparer;
     self.data.comments = entry.comments;
     self.data.newProgram = entry.newProgram;
     self.data.minParticipants = entry.minParticipants;

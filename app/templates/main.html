@@ -46,7 +46,7 @@
     <md-content flex id="content">
     <div ng-cloak>
       <md-content>
-        <form novalidate name="parkForm">
+        <form novalidate name="parkForm" ng-disabled="expression">
         <md-tabs md-dynamic-height md-border-bottom md-selected="app.selectedTab">
           <md-tab label="instructions">
             <md-content class="md-padding">
@@ -100,15 +100,16 @@
                 <label>Start Date</label>
                 <md-datepicker ng-model="app.data.start" name="dateField"></md-datepicker>
               </md-input-container>
-                <md-input-container class="md-block" >
-                  <label>Prepared By</label>
-                  <input ng-required="true" ng-model="app.data.preparer" placeholder="Who is filling out this form?">
-                </md-input-container>
+
       
                 <md-input-container class="md-block" >
                   <label>Comments</label>
                   <input ng-model="app.data.comments" placeholder="Enter any comments">
                 </md-input-container>
+                <md-input-container class="md-block" >
+                  <label>Prepared By</label>
+                  <input ng-disabled="true" ng-model="app.data.preparer" >
+                </md-input-container>                
             </md-content>
           </md-tab>
           <md-tab label="revenue estimates">
@@ -265,7 +266,7 @@
                         {{entry.title}} at {{entry.facility}} ({{entry.start | date: 'M/d/yyyy'}})
                     </h3>
                       <span flex></span>
-                      <md-button class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
+                      <md-button ng-if="app.user.admin || app.user.email === entry.preparer" class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
                       <md-button class="md-raised" ng-click="app.copyEntry(entry)">Copy</md-button>                      
                       <md-button class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>     
                   </div>

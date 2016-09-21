@@ -1,10 +1,13 @@
 function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $stateParams, $state, $mdDialog) {
   var self = this;
-  console.log($stateParams);
+  if (!$stateParams.user)
+    $state.go('login');
+  self.user = $stateParams.user;
   self.selectedTab = $stateParams.tab ? $stateParams.tab : 0;
   self.tabSelected = function (index) {
-  	console.log(index);
-  	$state.go('admin.tab', {tab: index});
+  	if (!self.user)
+      return false;
+  	$state.go('admin.tab', {tab: index, user: self.user});
   }
   if (!self.facilities) {
 	  $http.get("http://mapstest.raleighnc.gov/parks-form-api/facilities").then(function (result) {

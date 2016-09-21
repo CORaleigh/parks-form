@@ -23,10 +23,14 @@
     </md-button>
     <h1>PRCR Experience - Pricing Form</h1>
     <span flex></span>
-      <md-button class="menu" 
+      <md-button ng-if="app.user.admin" class="menu" 
                  aria-label="Show User List" ng-click="app.adminClicked()">
         {{app.admin ? 'form' : 'admin'}}
       </md-button>
+      <md-button ng-if="app.user" class="menu" 
+                 aria-label="Logout" ng-click="app.logout()">
+        Logout
+      </md-button>      
     </div>
   </md-toolbar>
 
