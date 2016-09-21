@@ -13,21 +13,20 @@
 </head>
 
 <body ng-cloak layout="column" ng-controller="AppController as app">
-
   <!-- Container #1 (see wireframe) -->
   <md-toolbar layout="row" class="md-toolbar-tools">
     <div class="md-toolbar-tools">
-    <md-button class="menu md-icon-button" hide-gt-sm ng-click="app.toggleList()"
+    <md-button ng-if="'form' | includedByState" class="menu md-icon-button" hide-gt-sm ng-click="app.toggleList()"
                aria-label="Show User List">
       <md-icon md-svg-icon="menu"></md-icon>
     </md-button>
     <h1>PRCR Experience - Pricing Form</h1>
     <span flex></span>
-      <md-button ng-if="app.user.admin" class="menu" 
+      <md-button ng-if="app.user.admin" 
                  aria-label="Show User List" ng-click="app.adminClicked()">
         {{app.admin ? 'form' : 'admin'}}
       </md-button>
-      <md-button ng-if="app.user" class="menu" 
+      <md-button ng-if="app.user"
                  aria-label="Logout" ng-click="app.logout()">
         Logout
       </md-button>      

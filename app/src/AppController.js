@@ -22,5 +22,8 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,
     self.user = null;
     $state.go('login');
   };
+  self.toggleList = function () {
+    $mdSidenav('left').toggle();
+  };
 }
 export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', AppController ];

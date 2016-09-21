@@ -260,8 +260,8 @@
           <md-tab label="history" md-on-select="app.getHistory()">
             <md-content class="md-padding">
               <md-card class="history-card" ng-repeat="entry in app.history">
-               <md-toolbar md-scroll-shrink ng-if="true">
-                  <div class="md-toolbar-tools">
+               <md-toolbar layout-wrap md-scroll-shrink ng-if="true">
+                  <div layout="row" class="md-toolbar-tools">
                     <h3 ng-click="app.togglePersonnel(type, $index)">
                         {{entry.title}} at {{entry.facility}} ({{entry.start | date: 'M/d/yyyy'}})
                     </h3>

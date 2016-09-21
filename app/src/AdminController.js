@@ -4,6 +4,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     $state.go('login');
   self.user = $stateParams.user;
   self.selectedTab = $stateParams.tab ? $stateParams.tab : 0;
+
   self.tabSelected = function (index) {
   	if (!self.user)
       return false;
