@@ -4,14 +4,23 @@
  * @param $mdSidenav
  * @constructor
  */
-function LoginController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $location, $state) {
+function LoginController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $location, $state, $mdToast) {
   var self = this;
   self.login = function (credentials) {
     credentials.email = credentials.email.toLowerCase();
     $http.post('http://mapstest.raleighnc.gov/parks-form-api/login', credentials).then(function (result) {
-      if (result.data.success)
+      if (result.data.success) {
         $state.go('form', {user: result.data.user});
+      } else {
+        showToast(result.data.msg);
+      }
+
     });
-  };  
+  }; 
+
+  var showToast = function (message) {
+    var toast = $mdToast.simple().position('top').textContent(message);
+    $mdToast.show(toast);
+  };
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', LoginController ];
+export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', '$mdToast', LoginController ];

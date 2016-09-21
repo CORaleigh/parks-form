@@ -24,7 +24,7 @@
 		                <md-button style="height: 38px" class="md-primary md-raised md-secondary" ng-click="admin.addTarget()">Add</md-button>	   
 		            </md-list-item>
 	            	<div ng-repeat="target in admin.targets | orderBy: 'name'">
-				        <md-subheader class="md-no-sticky">
+				        <md-subheader class="md-no-sticky target-header">
 				        	<md-list-item class="secondary-button-padding">
 				                <h2>{{target.name}}</h2>		                
 				                <md-button style="height: 38px" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'target', target)">Delete</md-button>	   
