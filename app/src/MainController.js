@@ -201,7 +201,6 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
         data: {id: entry._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (response) {
-      console.log(results);
       self.getHistory();
     });     
   }
