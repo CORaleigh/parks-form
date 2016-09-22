@@ -103,6 +103,9 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
         case 'service':
           self.deleteService(item, item2)
         break;
+        case 'user':
+          self.deleteUser(item);
+        break;
       }
     }, function() {
       
@@ -151,6 +154,17 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
       var index = target.services.indexOf(service);
       target.services.splice(index, 1);
     }); 
-  }              
+  }
+  self.deleteUser = function (user) {
+    $http({
+        method: 'DELETE',
+        url: api + 'users/' + user._id,
+        data: {token: $stateParams.token},
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
+    }).then(function (results) {
+      var index = self.facilities.indexOf(job);
+      self.jobs.splice(index, 1);
+    });     
+  }                
 }
 export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$stateParams', '$state', '$mdDialog', '$mdMedia', '$window', AdminController ];
