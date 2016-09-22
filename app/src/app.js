@@ -45,7 +45,7 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.r
     .state('form', {
         url: '/form',
         templateUrl: './templates/main.html',
-        params: {user: null}
+        params: {user: null, token: null}
     })
     .state('form.id', {
         url: '/:id',
@@ -54,12 +54,12 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.r
     .state('admin', {
         url: '/admin',
         templateUrl: './templates/admin.html',
-        params: {tab: 0, user: null}   
+        params: {tab: 0, user: null, token: null}   
     })
     .state('admin.tab', {
         url: '/:tab',
         templateUrl: './templates/admin.html',
-        params: {tab: 0, user: null}     
+        params: {tab: 0, user: null, token: null}     
     });
   })
   .controller('AppController', AppController)

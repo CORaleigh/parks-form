@@ -10,7 +10,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     $state.go('login');
     return false;
   }
-
+  var token = $stateParams.token;
   self.user = $stateParams.user;
   $rootScope.$emit("UserAuthenticated", self.user);
 
@@ -25,11 +25,11 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
   self.revenueEstimate = 0;  
   $scope.$mdMedia = $mdMedia;
   //get Facilities, Targets, and Jobs from database
-  $http.get("http://mapstest.raleighnc.gov/parks-form-api/targets").then(function (result) {
+  $http.get("http://mapstest.raleighnc.gov/parks-form-api/targets", {params: {token: token}}).then(function (result) {
     self.targets = result.data;
-    $http.get("http://mapstest.raleighnc.gov/parks-form-api/facilities").then(function (result) {
+    $http.get("http://mapstest.raleighnc.gov/parks-form-api/facilities", {params: {token: token}}).then(function (result) {
       self.facilities = result.data;
-      $http.get("http://mapstest.raleighnc.gov/parks-form-api/jobs").then(function (result) {
+      $http.get("http://mapstest.raleighnc.gov/parks-form-api/jobs", {params: {token: token}}).then(function (result) {
         self.jobs = result.data;
         //if ID set in URL, select entry by id
         if ($stateParams.id) {
@@ -138,7 +138,8 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
           revenue: self.revenueEstimate,
           cost: self.costEstimate,
           recoveryProjected: self.revenueEstimate / self.costEstimate,
-          recoveryTarget: self.data.category.value
+          recoveryTarget: self.data.category.value,
+          token: token
         }
     ).then(function (response) {
       if (isCopy) {
@@ -154,14 +155,14 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
 
   //get all entries when History tab selected
   self.getHistory = function () {
-    $http.get("http://mapstest.raleighnc.gov/parks-form-api/form").then(function (results) {
+    $http.get("http://mapstest.raleighnc.gov/parks-form-api/form", {params:{token: token}}).then(function (results) {
       self.history = results.data;
     });
   }
 
   //get entry by ID
   self.getEntryById = function (id) {
-    $http.get("http://mapstest.raleighnc.gov/parks-form-api/form/" + id).then(function (results) {
+    $http.get("http://mapstest.raleighnc.gov/parks-form-api/form/" + id, {params:{token: token}}).then(function (results) {
       if (results.data.length > 0) {
         self.selectEntry(results.data[0]);        
       }
@@ -173,7 +174,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     $http({
         method: 'DELETE',
         url: 'http://mapstest.raleighnc.gov/parks-form-api/form',
-        data: {id: entry._id},
+        data: {id: entry._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
       console.log(results);
