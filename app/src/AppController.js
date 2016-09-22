@@ -6,20 +6,20 @@
  */
 function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope, $scope, $timeout, $location, $state, $mdMedia) {
   var self = this;
-  $rootScope.$on("UserAuthenticated", function(e, user){
-    self.user = user;
+  $rootScope.$on("UserAuthenticated", function(e, params){
+    self.params = params;
   });
   self.admin = $location.path().indexOf('admin') > -1
   self.adminClicked = function () {
     self.admin = !self.admin;
     if (self.admin) {
-      $state.go('admin', {user: self.user});
+      $state.go('admin', self.params);
     } else {
-      $state.go('form', {user: self.user});
+      $state.go('form', self.params);
     }
   }
   self.logout = function () {
-    self.user = null;
+    self.params = null;
     $state.go('login');
   };
   self.toggleList = function () {

@@ -2,6 +2,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   var self = this;
   if (!$stateParams.user)
     $state.go('login');
+  var api = 'http://localhost:8081/parks-form-api/'; 
   self.user = $stateParams.user;
   self.selectedTab = $stateParams.tab ? $stateParams.tab : 0;
 
@@ -11,24 +12,24 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   	$state.go('admin.tab', {tab: index, user: self.user});
   }
   if (!self.facilities) {
-	  $http.get("http://mapstest.raleighnc.gov/parks-form-api/facilities", {params: {token: $stateParams.token}}).then(function (result) {
+	  $http.get(api + "facilities", {params: {token: $stateParams.token}}).then(function (result) {
 	    self.facilities = result.data;
 	  });  	
   }
   if (!self.jobs) {
-	  $http.get("http://mapstest.raleighnc.gov/parks-form-api/jobs", {params: {token: $stateParams.token}}).then(function (result) {
+	  $http.get(api + "jobs", {params: {token: $stateParams.token}}).then(function (result) {
 	    self.jobs = result.data;
 	  });
   }
   if (!self.targets) {
-   $http.get("http://mapstest.raleighnc.gov/parks-form-api/targets", {params: {token: $stateParams.token}}).then(function (result) {
+   $http.get(api + "targets", {params: {token: $stateParams.token}}).then(function (result) {
     self.targets = result.data;
    });  	
   } 
 
   self.addFacility = function () {
     if (self.newFacility) {
-      var url = "http://mapstest.raleighnc.gov/parks-form-api/facilities";
+      var url = api + "facilities";
       $http.post(url, {name: self.newFacility, token: $stateParams.token}).then(function (response) {
         self.facilities.push({name: self.newFacility, _id: response._id});
         self.newFacility = null;
@@ -37,7 +38,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   } 
   self.addTarget = function () {
     if (self.newTarget) {
-      var url = "http://mapstest.raleighnc.gov/parks-form-api/targets";
+      var url = api + "targets";
       $http.post(url, {name: self.newTarget, token: $stateParams.token}).then(function (response) {
         self.targets.push({name: self.newTarget, _id: response.data._id, services: []});
         self.newTarget = null;
@@ -46,7 +47,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   }
   self.addService = function (target) {
     if (target.newServiceName && target.newServiceValue) {
-      var url = "http://mapstest.raleighnc.gov/parks-form-api/targets/" + target._id;
+      var url = api + "targets/" + target._id;
       $http.post(url, {name: target.newServiceName, value: target.newServiceValue, token: $stateParams.token}).then(function (response) {
         target.services.push({name: target.newServiceName, value: target.newServiceValue});
         target.newServiceName = null;
@@ -55,7 +56,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     }
   }  
   self.updateService = function (service) {
-      var url = "http://mapstest.raleighnc.gov/parks-form-api/targets/service/" + service._id;
+      var url = api + "targets/service/" + service._id;
       $http.post(url, {name: service.name, value: service.value, token: $stateParams.token}).then(function (response) {
         //self.targets.push({name: self.newTarget});
         //self.newTarget = null;
@@ -65,7 +66,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   
   self.addJob = function () {
     if (self.newJob) {
-      var url = "http://mapstest.raleighnc.gov/parks-form-api/jobs";
+      var url = api + "jobs";
       $http.post(url, {name: self.newJob, token: $stateParams.token}).then(function (response) {
         self.jobs.push({name: self.newJob});
         self.newJob = null;
@@ -104,7 +105,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   self.deleteFacility = function (facility) {
     $http({
         method: 'DELETE',
-        url: 'http://mapstest.raleighnc.gov/parks-form-api/facilities',
+        url: api + 'facilities',
         data: {id: facility._id, token: $stateParams.token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
@@ -115,7 +116,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   self.deleteJob = function (job) {
     $http({
         method: 'DELETE',
-        url: 'http://mapstest.raleighnc.gov/parks-form-api/jobs',
+        url: api + 'jobs',
         data: {id: job._id, token: $stateParams.token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
@@ -126,7 +127,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   self.deleteTarget = function (target) {
     $http({
         method: 'DELETE',
-        url: 'http://mapstest.raleighnc.gov/parks-form-api/targets',
+        url: api + 'targets',
         data: {id: target._id, token: $stateParams.token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
@@ -137,7 +138,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   self.deleteService = function (service, target) {
     $http({
         method: 'DELETE',
-        url: 'http://mapstest.raleighnc.gov/parks-form-api/targets/service/' + service._id,
+        url: api + 'targets/service/' + service._id,
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
       var index = target.services.indexOf(service);
