@@ -1,31 +1,38 @@
-function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $stateParams, $state, $mdDialog) {
+function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $stateParams, $state, $mdDialog, $mdMedia, $window) {
   var self = this;
   if (!$stateParams.user)
     $state.go('login');
   var api = 'http://localhost:8081/parks-form-api/'; 
   self.user = $stateParams.user;
   self.selectedTab = $stateParams.tab ? $stateParams.tab : 0;
-
+  self.$window = $window;
   self.tabSelected = function (index) {
+    console.log($window);
   	if (!self.user)
       return false;
   	$state.go('admin.tab', {tab: index, user: self.user});
   }
+  if (!$stateParams.token) {
+    return false;
+  }
   if (!self.facilities) {
-	  $http.get(api + "facilities", {params: {token: $stateParams.token}}).then(function (result) {
-	    self.facilities = result.data;
+	  $http.get(api + "facilities", {params: {token: $stateParams.token}}).then(function (response) {
+	    self.facilities = response.data.results;
 	  });  	
   }
   if (!self.jobs) {
-	  $http.get(api + "jobs", {params: {token: $stateParams.token}}).then(function (result) {
-	    self.jobs = result.data;
+	  $http.get(api + "jobs", {params: {token: $stateParams.token}}).then(function (response) {
+	    self.jobs = response.data.results;
 	  });
   }
   if (!self.targets) {
-   $http.get(api + "targets", {params: {token: $stateParams.token}}).then(function (result) {
-    self.targets = result.data;
+   $http.get(api + "targets", {params: {token: $stateParams.token}}).then(function (response) {
+    self.targets = response.data.results;
    });  	
   } 
+   $http.get(api + "users", {params: {token: $stateParams.token}}).then(function (response) {
+    self.users = response.data.results;
+   });  
 
   self.addFacility = function () {
     if (self.newFacility) {
@@ -146,4 +153,4 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     }); 
   }              
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$stateParams', '$state', '$mdDialog',AdminController ];
+export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$stateParams', '$state', '$mdDialog', '$mdMedia', '$window', AdminController ];

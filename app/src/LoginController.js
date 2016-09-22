@@ -4,7 +4,7 @@
  * @param $mdSidenav
  * @constructor
  */
-function LoginController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $location, $state, $mdToast) {
+function LoginController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $location, $state, $stateParams, $mdToast) {
   var self = this;
   self.login = function (credentials) {
     credentials.email = credentials.email.toLowerCase();
@@ -14,13 +14,14 @@ function LoginController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
       } else {
         showToast(result.data.msg);
       }
-
     });
   }; 
-
   var showToast = function (message) {
     var toast = $mdToast.simple().position('top').textContent(message);
     $mdToast.show(toast);
   };
+
+  if ($stateParams.message)
+    showToast($stateParams.message);
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', '$mdToast', LoginController ];
+export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', '$stateParams', '$mdToast', LoginController ];

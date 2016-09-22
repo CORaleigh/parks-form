@@ -26,12 +26,25 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
   self.revenueEstimate = 0;  
   $scope.$mdMedia = $mdMedia;
   //get Facilities, Targets, and Jobs from database
-  $http.get(api + "targets", {params: {token: token}}).then(function (result) {
-    self.targets = result.data;
-    $http.get(api + "facilities", {params: {token: token}}).then(function (result) {
-      self.facilities = result.data;
-      $http.get(api + "jobs", {params: {token: token}}).then(function (result) {
-        self.jobs = result.data;
+  $http.get(api + "targets", {params: {token: token}}).then(function (response) {
+    if (response.data.success) {
+      self.targets = response.data.results;
+    } else {
+      $state.go('login', {message: response.data.message});
+    }
+    $http.get(api + "facilities", {params: {token: token}}).then(function (response) {
+      if (response.data.success) {
+        self.facilities = response.data.results;
+      } else {
+        $state.go('login', {message: response.data.message});
+      }      
+      $http.get(api + "jobs", {params: {token: token}}).then(function (response) {
+        if (response.data.success) {
+          self.jobs = response.data.results;
+        } else {
+          $state.go('login', {message: response.data.message});
+        }           
+
         //if ID set in URL, select entry by id
         if ($stateParams.id) {
           self.getEntryById($stateParams.id);
@@ -149,23 +162,33 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
         self.selectedTab = 4;
       }
       
-      self.id = response.data._id;
-      $state.go('form.id', {id: self.id});
+      if (response.data.success) {
+        self.id = response.data._id;
+        $state.go('form.id', {id: self.id});
+      } else {
+        $state.go('login', {message: response.data.message});
+      }  
+
+
     });
   }
 
   //get all entries when History tab selected
   self.getHistory = function () {
-    $http.get(api + "form", {params:{token: token}}).then(function (results) {
-      self.history = results.data;
+    $http.get(api + "form", {params:{token: token}}).then(function (response) {
+      if (response.data.success) {
+        self.history = response.data.results;
+      } else {
+        $state.go('login', {message: response.data.message});
+      }        
     });
   }
 
   //get entry by ID
   self.getEntryById = function (id) {
-    $http.get(api + "form/" + id, {params:{token: token}}).then(function (results) {
-      if (results.data.length > 0) {
-        self.selectEntry(results.data[0]);        
+    $http.get(api + "form/" + id, {params:{token: token}}).then(function (response) {
+      if (response.data.results.length > 0) {
+        self.selectEntry(response.data.results[0]);        
       }
     });
   }  
@@ -177,7 +200,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
         url: api + 'form',
         data: {id: entry._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
-    }).then(function (results) {
+    }).then(function (response) {
       console.log(results);
       self.getHistory();
     });     

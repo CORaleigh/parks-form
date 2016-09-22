@@ -8,6 +8,7 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,
   var self = this;
   $rootScope.$on("UserAuthenticated", function(e, params){
     self.params = params;
+    self.admin = $location.path().indexOf('admin') > -1
   });
   self.admin = $location.path().indexOf('admin') > -1
   self.adminClicked = function () {
