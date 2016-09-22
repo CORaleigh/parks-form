@@ -2,7 +2,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   var self = this;
   if (!$stateParams.user)
     $state.go('login');
-  var api = 'http://localhost:8081/parks-form-api/'; 
+  var api = 'http://mapstest.raleighnc.gov/parks-form-api/'; 
   self.user = $stateParams.user;
   self.selectedTab = $stateParams.tab ? $stateParams.tab : 0;
   self.$window = $window;
