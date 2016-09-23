@@ -13,7 +13,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     $state.go('login');
     return false;    
   }
-  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+  var api = 'http://localhost:8081/parks-form-api/';
   var creds = JSON.parse($window.localStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
@@ -244,7 +244,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     self.data.start = new Date(entry.start);
     self.data.cityFacility = entry.cityFacility;
     self.data.facility = $filter('filter')(self.facilities, entry.facility)[0];    
-    self.data.preparer = self.user.email;//entry.preparer;
+    self.data.preparer = entry.preparer;
     self.data.comments = entry.comments;
     self.data.newProgram = entry.newProgram;
     self.data.minParticipants = entry.minParticipants;
@@ -265,7 +265,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
 
   //clear form
   self.clear = function () {
-    self.data = {target: {}, personnel: [{}], full: false, newProgram: false, comments: '', facility: ''};
+    self.data = {preparer: self.user.email,target: {}, personnel: [{}], full: false, newProgram: false, comments: '', facility: ''};
     self.id = null;
     self.selectedTab = 1;
   }
@@ -279,5 +279,6 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
       }
     }
   };
+
 }
 export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$rootScope', '$scope',  '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', '$window', MainController ];
