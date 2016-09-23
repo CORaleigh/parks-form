@@ -14,8 +14,8 @@
 					</md-button> 	                	   
 	            </md-list-item>              
               	<md-list-item class="secondary-button-padding"  ng-repeat="facility in admin.facilities | orderBy: 'name'"  ng-click="null">{{facility.name}}
-              		<md-button ng-if="$mdMedia('gt-xs')" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'facility', facility)">Delete</md-button>	
-					<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'facility', facility)" class="md-icon-button md-warn md-secondary" >
+              		<md-button ng-if="$mdMedia('gt-xs')" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'facility', 'name', facility)">Delete</md-button>	
+					<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'facility', 'name', facility)" class="md-icon-button md-warn md-secondary" >
 						<md-tooltip>Delete Facility</md-tooltip>
 						<md-icon md-svg-icon="delete"></md-icon>
 					</md-button>  
@@ -45,8 +45,8 @@
 				        <md-subheader class="target-header">
 				        	<md-list-item class="secondary-button-padding">
 				                <h2>{{target.name}}</h2>		                
-				                <md-button ng-if="$mdMedia('gt-xs')" style="height: 38px" class="md-warn md-raised  md-secondary" ng-click="admin.showConfirm($event, 'target', target)">Delete</md-button>
-								<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'target', target)" class="md-icon-button md-warn md-secondary" >
+				                <md-button ng-if="$mdMedia('gt-xs')" style="height: 38px" class="md-warn md-raised  md-secondary" ng-click="admin.showConfirm($event, 'target', 'name', target)">Delete</md-button>
+								<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'target', 'name', target)" class="md-icon-button md-warn md-secondary" >
 									<md-tooltip>Delete Target</md-tooltip>
 									<md-icon md-svg-icon="delete"></md-icon>
 								</md-button>  				                  
@@ -78,8 +78,8 @@
 								<md-tooltip>Update Service</md-tooltip>
 								<md-icon md-svg-icon="update"></md-icon>
 							</md-button>  			                		                
-			                <md-button ng-if="$mdMedia('gt-xs')" style="height: 38px" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'service', service, target)">Delete</md-button>	
-							<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'service', service)" class="md-icon-button md-warn md-secondary" >
+			                <md-button ng-if="$mdMedia('gt-xs')" style="height: 38px" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'service', 'name', service, target)">Delete</md-button>	
+							<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'service', 'name', service, target)" class="md-icon-button md-warn md-secondary" >
 								<md-tooltip>Delete Service</md-tooltip>
 								<md-icon md-svg-icon="delete"></md-icon>
 							</md-button>  
@@ -105,8 +105,8 @@
 					</md-button>  
 	            </md-list-item>              
               	<md-list-item class="secondary-button-padding" ng-repeat="job in admin.jobs | orderBy: 'name'" ng-click="null">{{job.name}}
-              		<md-button ng-if="$mdMedia('gt-xs')" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'job', job)">Delete</md-button>	
-					<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'job', job)" class="md-icon-button md-warn md-secondary" >
+              		<md-button ng-if="$mdMedia('gt-xs')" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'job', 'name', job)">Delete</md-button>	
+					<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'job', 'name', job)" class="md-icon-button md-warn md-secondary" >
 						<md-tooltip>Delete Job</md-tooltip>
 						<md-icon md-svg-icon="delete"></md-icon>
 					</md-button>  
@@ -118,11 +118,11 @@
             <md-content class="md-padding">
               <md-list>            
               	<md-list-item class="secondary-button-padding" ng-repeat="user in admin.users | orderBy: 'email'">{{user.email}}
-              		<md-checkbox class="md-secondary" ng-model="user.admin" aria-label="Is this a new program?">
+              		<md-checkbox class="md-secondary" ng-model="user.admin" aria-label="Is this a new program?" ng-change="admin.changeAdmin(user)">
                   		Admin?
                 	</md-checkbox>              	
-              			<md-button ng-if="$mdMedia('gt-xs')" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'user', user)">Delete</md-button>	
-						<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'user', user)" class="md-icon-button md-warn md-secondary" >
+              			<md-button ng-if="$mdMedia('gt-xs')" class="md-warn md-raised md-secondary" ng-click="admin.showConfirm($event, 'user', 'email', user)">Delete</md-button>	
+						<md-button ng-if="$mdMedia('xs')" ng-click="admin.showConfirm($event, 'user', 'email', user)" class="md-icon-button md-warn md-secondary" >
 							<md-tooltip>Delete User</md-tooltip>
 							<md-icon md-svg-icon="delete"></md-icon>
 						</md-button>        

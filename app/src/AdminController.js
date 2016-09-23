@@ -1,43 +1,65 @@
 function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $stateParams, $state, $mdDialog, $mdMedia, $window) {
   var self = this;
-  if (!$stateParams.user)
+  if (!$window.localStorage.getItem('credentials')) {//!$stateParams.user) {
     $state.go('login');
-  var api = 'http://mapstest.raleighnc.gov/parks-form-api/'; 
-  self.user = $stateParams.user;
+    return false;
+  } else if ($window.localStorage.getItem('credentials').expires > new Date()){
+    $state.go('login');
+    return false;    
+  }
+  var api = 'http://localhost:8081/parks-form-api/';
+  var creds = JSON.parse($window.localStorage.getItem('credentials'));
+  var token = creds.token;
+  self.user = creds.user;
   self.selectedTab = $stateParams.tab ? $stateParams.tab : 0;
   self.$window = $window;
   self.tabSelected = function (index) {
-    console.log($window);
   	if (!self.user)
       return false;
   	$state.go('admin.tab', {tab: index, user: self.user});
   }
-  if (!$stateParams.token) {
+  if (!token) {
     return false;
   }
   if (!self.facilities) {
-	  $http.get(api + "facilities", {params: {token: $stateParams.token}}).then(function (response) {
-	    self.facilities = response.data.results;
+	  $http.get(api + "facilities", {params: {token: token}}).then(function (response) {
+	    if (response.data.success) {
+      self.facilities = response.data.results;
+      } else {
+        $state.go('login', {message: response.data.message});
+      }
 	  });  	
   }
   if (!self.jobs) {
-	  $http.get(api + "jobs", {params: {token: $stateParams.token}}).then(function (response) {
-	    self.jobs = response.data.results;
+	  $http.get(api + "jobs", {params: {token: token}}).then(function (response) {
+	    if (response.data.success) {
+      self.jobs = response.data.results;
+      } else {
+        $state.go('login', {message: response.data.message});
+      }
 	  });
   }
   if (!self.targets) {
-   $http.get(api + "targets", {params: {token: $stateParams.token}}).then(function (response) {
+   $http.get(api + "targets", {params: {token: token}}).then(function (response) {
+    if (response.data.success) {
     self.targets = response.data.results;
+    } else {
+        $state.go('login', {message: response.data.message});
+    }
    });  	
   } 
-   $http.get(api + "users", {params: {token: $stateParams.token}}).then(function (response) {
+   $http.get(api + "users", {params: {token: token}}).then(function (response) {
+    if (response.data.success) {
     self.users = response.data.results;
+    } else {
+        $state.go('login', {message: response.data.message});
+    }
    });  
 
   self.addFacility = function () {
     if (self.newFacility) {
       var url = api + "facilities";
-      $http.post(url, {name: self.newFacility, token: $stateParams.token}).then(function (response) {
+      $http.post(url, {name: self.newFacility, token: token}).then(function (response) {
         self.facilities.push({name: self.newFacility, _id: response._id});
         self.newFacility = null;
       });      
@@ -46,7 +68,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   self.addTarget = function () {
     if (self.newTarget) {
       var url = api + "targets";
-      $http.post(url, {name: self.newTarget, token: $stateParams.token}).then(function (response) {
+      $http.post(url, {name: self.newTarget, token: token}).then(function (response) {
         self.targets.push({name: self.newTarget, _id: response.data._id, services: []});
         self.newTarget = null;
       });      
@@ -55,7 +77,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   self.addService = function (target) {
     if (target.newServiceName && target.newServiceValue) {
       var url = api + "targets/" + target._id;
-      $http.post(url, {name: target.newServiceName, value: target.newServiceValue, token: $stateParams.token}).then(function (response) {
+      $http.post(url, {name: target.newServiceName, value: target.newServiceValue, token: token}).then(function (response) {
         target.services.push({name: target.newServiceName, value: target.newServiceValue});
         target.newServiceName = null;
         target.newServiceValue = null;
@@ -64,7 +86,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   }  
   self.updateService = function (service) {
       var url = api + "targets/service/" + service._id;
-      $http.post(url, {name: service.name, value: service.value, token: $stateParams.token}).then(function (response) {
+      $http.post(url, {name: service.name, value: service.value, token: token}).then(function (response) {
         //self.targets.push({name: self.newTarget});
         //self.newTarget = null;
       });      
@@ -74,16 +96,16 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
   self.addJob = function () {
     if (self.newJob) {
       var url = api + "jobs";
-      $http.post(url, {name: self.newJob, token: $stateParams.token}).then(function (response) {
+      $http.post(url, {name: self.newJob, token: token}).then(function (response) {
         self.jobs.push({name: self.newJob});
         self.newJob = null;
       });      
     }
   }
 
-  self.showConfirm = function(ev, type, item, item2) {
+  self.showConfirm = function(ev, type, field, item, item2) {
     var confirm = $mdDialog.confirm()
-          .title('Would you like to delete ' + type + ': ' + item.name + '?')
+          .title('Would you like to delete ' + type + ': ' + item[field] + '?')
           .ariaLabel('Delete')
           .targetEvent(ev)
           .ok('Yes')
@@ -116,7 +138,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     $http({
         method: 'DELETE',
         url: api + 'facilities',
-        data: {id: facility._id, token: $stateParams.token},
+        data: {id: facility._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
       var index = self.facilities.indexOf(facility);
@@ -127,7 +149,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     $http({
         method: 'DELETE',
         url: api + 'jobs',
-        data: {id: job._id, token: $stateParams.token},
+        data: {id: job._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
       var index = self.facilities.indexOf(job);
@@ -138,7 +160,7 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     $http({
         method: 'DELETE',
         url: api + 'targets',
-        data: {id: target._id, token: $stateParams.token},
+        data: {id: target._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
       var index = self.targets.indexOf(target);
@@ -159,12 +181,19 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
     $http({
         method: 'DELETE',
         url: api + 'users/' + user._id,
-        data: {token: $stateParams.token},
+        data: {token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
-      var index = self.facilities.indexOf(job);
-      self.jobs.splice(index, 1);
+      var index = self.users.indexOf(user);
+      self.users.splice(index, 1);
     });     
-  }                
+  }      
+  self.changeAdmin = function (user) {
+      var url = api + "users/" + user._id;
+      $http.post(url, {admin: user.admin, token: token}).then(function (response) {
+        //self.targets.push({name: self.newTarget});
+        //self.newTarget = null;
+      });   
+  }         
 }
 export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$stateParams', '$state', '$mdDialog', '$mdMedia', '$window', AdminController ];

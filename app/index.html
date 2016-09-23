@@ -22,6 +22,7 @@
     </md-button>
     <h1>PRCR Experience - Pricing Form</h1>
     <span flex></span>
+      <div ng-if="app.$state.current.name.indexOf('admin') > - 1 || app.$state.current.name.indexOf('form') > - 1">
       <md-button ng-show="$mdMedia('gt-sm')" ng-if="app.params.user.admin" 
                  aria-label="Change Mode" ng-click="app.adminClicked()">
         {{app.admin ? 'form' : 'admin'}}
@@ -46,7 +47,8 @@
               </md-button>
           </md-menu-item>
         </md-menu-content>
-      </md-menu>          
+      </md-menu> 
+      </div>         
     </div>
   </md-toolbar>
 

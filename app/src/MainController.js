@@ -4,15 +4,20 @@
  * @param $mdSidenav
  * @constructor
  */
-function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,$scope, $timeout, $state, $stateParams, $mdDialog, $mdMedia) {
+function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,$scope, $timeout, $state, $stateParams, $mdDialog, $mdMedia, $window) {
   var self = this;
-  if (!$stateParams.user) {
+  if (!$window.localStorage.getItem('credentials')) {//!$stateParams.user) {
     $state.go('login');
     return false;
+  } else if ($window.localStorage.getItem('credentials').expires > new Date()){
+    $state.go('login');
+    return false;    
   }
-  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
-  var token = $stateParams.token;
-  self.user = $stateParams.user;
+  var api = 'http://localhost:8081/parks-form-api/';
+  var creds = JSON.parse($window.localStorage.getItem('credentials'));
+  var token = creds.token;
+  self.user = creds.user;
+
   $rootScope.$emit("UserAuthenticated", $stateParams);
 
   var FICA = 1.0765;
@@ -275,4 +280,4 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     }
   };
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$rootScope', '$scope',  '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', MainController ];
+export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$rootScope', '$scope',  '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', '$window', MainController ];
