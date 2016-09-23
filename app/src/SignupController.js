@@ -1,10 +1,8 @@
 /**
  * Main App Controller for the Angular Material Starter App
- * @param UsersDataService
- * @param $mdSidenav
  * @constructor
  */
-function SignupController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $location, $state, $mdToast) {
+function SignupController( $mdSidenav, $http, $state, $mdToast) {
   var self = this;
   self.signup = function (credentials) {
     credentials.email = credentials.email.toLowerCase();
@@ -21,4 +19,4 @@ function SignupController(UsersDataService, $mdSidenav, $http, $filter, $scope, 
     $mdToast.show(toast);
   };  
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', '$mdToast', SignupController ];
+export default [ '$mdSidenav', '$http', '$state', '$mdToast', SignupController ];

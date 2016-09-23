@@ -4,21 +4,21 @@
  * @param $mdSidenav
  * @constructor
  */
-function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope, $scope, $timeout, $location, $state, $mdMedia, $window) {
+function AppController($mdSidenav, $http, $filter, $rootScope, $scope, $timeout, $location, $state, $mdMedia, $window) {
   var self = this;
   $rootScope.$on("UserAuthenticated", function(e, params){
     //self.params = params;
     //console.log(params);
      self.$state = $state;
-    if ($window.localStorage.getItem('credentials')) {
-      self.params = JSON.parse($window.localStorage.getItem('credentials'));
+    if ($window.sessionStorage.getItem('credentials')) {
+      self.params = JSON.parse($window.sessionStorage.getItem('credentials'));
     }     
   });
   self.$state = $state;
   console.log($state);
   self.admin = $location.path().indexOf('admin') > -1;
-  if ($window.localStorage.getItem('credentials')) {
-    self.params = JSON.parse($window.localStorage.getItem('credentials'));
+  if ($window.sessionStorage.getItem('credentials')) {
+    self.params = JSON.parse($window.sessionStorage.getItem('credentials'));
   }
   self.adminClicked = function () {
     self.admin = !self.admin;
@@ -37,4 +37,4 @@ function AppController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,
   };
   $scope.$mdMedia = $mdMedia
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$rootScope', '$scope', '$timeout', '$location', '$state', '$mdMedia', '$window', AppController ];
+export default [ '$mdSidenav', '$http', '$filter', '$rootScope', '$scope', '$timeout', '$location', '$state', '$mdMedia', '$window', AppController ];

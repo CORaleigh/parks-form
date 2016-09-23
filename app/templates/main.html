@@ -20,7 +20,8 @@
           <span>Cost Recovery (projected)</span>
           <span ng-hide="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">{{((app.revenueEstimate / app.costEstimate) * 100).toFixed(0)}}%</span>
           <span ng-show="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">--</span>          
-        </md-list-item>                        
+        </md-list-item>  
+        {{app.data.comments}}                      
       </md-list>
       <md-toolbar ng-hide="parkForm.$invalid" layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.category.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.category.value}">
         <div class="md-toolbar-tools">

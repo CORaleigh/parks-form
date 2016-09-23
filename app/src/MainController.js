@@ -1,20 +1,20 @@
 /**
  * Main App Controller for the Angular Material Starter App
- * @param UsersDataService
- * @param $mdSidenav
  * @constructor
  */
-function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope,$scope, $timeout, $state, $stateParams, $mdDialog, $mdMedia, $window) {
+function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout, $state, $stateParams, $mdDialog, $mdMedia, $window) {
   var self = this;
-  if (!$window.localStorage.getItem('credentials')) {//!$stateParams.user) {
+  if (!$window.sessionStorage.getItem('credentials')) {//!$stateParams.user) {
     $state.go('login');
     return false;
-  } else if ($window.localStorage.getItem('credentials').expires > new Date()){
+  } else if ($window.sessionStorage.getItem('credentials').expires > new Date()){
     $state.go('login');
     return false;    
   }
-  var api = 'http://localhost:8081/parks-form-api/';
-  var creds = JSON.parse($window.localStorage.getItem('credentials'));
+
+
+  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+  var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
 
@@ -26,9 +26,15 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
   self.cityFacility = true;
   self.payTypes = [{name: "Per Student"},{name: "Hourly"}];  
   self.statuses = [{name: "Contractor"},{name: "Payroll"}];    
-  self.data = {preparer: self.user.email, target: {}, personnel: [{visible: true, cost: null}], cityFacility: true, full: false, newProgram: false, comments: ''};
+  self.data = {default: true, preparer: self.user.email, target: {}, personnel: [{visible: true, cost: null}], cityFacility: true, full: false, newProgram: false, comments: ''};
   self.costEstimate = 0;
   self.revenueEstimate = 0;  
+  $timeout(function (){
+    if ($window.sessionStorage.getItem('data')) {
+      self.data = JSON.parse($window.sessionStorage.getItem('data'));  
+    }
+  });    
+
   $scope.$mdMedia = $mdMedia;
   //get Facilities, Targets, and Jobs from database
   $http.get(api + "targets", {params: {token: token}}).then(function (response) {
@@ -268,6 +274,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     self.data = {preparer: self.user.email,target: {}, personnel: [{}], full: false, newProgram: false, comments: '', facility: ''};
     self.id = null;
     self.selectedTab = 1;
+    $window.sessionStorage.removeItem('data');
   }
 
   //handle collapsing/expanding of personnel cards
@@ -280,5 +287,14 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     }
   };
 
+  // $rootScope.$watchCollection(function() {
+  //   return this.data
+  // }.bind(this), function(data) {
+  //   if (JSON.stringify(data) != $window.sessionStorage.getItem('data') && !data.default){
+  //     data.default = false;
+  //     $window.sessionStorage.setItem('data', JSON.stringify(data));
+  //   }
+  // }.bind(this));
+
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$rootScope', '$scope',  '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', '$window', MainController ];
+export default [ '$mdSidenav', '$http', '$filter', '$rootScope', '$scope',  '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', '$window', MainController ];

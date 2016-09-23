@@ -1,14 +1,14 @@
-function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $timeout, $stateParams, $state, $mdDialog, $mdMedia, $window) {
+function AdminController($mdSidenav, $http, $stateParams, $state, $mdDialog, $window) {
   var self = this;
-  if (!$window.localStorage.getItem('credentials')) {//!$stateParams.user) {
+  if (!$window.sessionStorage.getItem('credentials')) {//!$stateParams.user) {
     $state.go('login');
     return false;
-  } else if ($window.localStorage.getItem('credentials').expires > new Date()){
+  } else if ($window.sessionStorage.getItem('credentials').expires > new Date()){
     $state.go('login');
     return false;    
   }
-  var api = 'http://localhost:8081/parks-form-api/';
-  var creds = JSON.parse($window.localStorage.getItem('credentials'));
+  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+  var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
   self.selectedTab = $stateParams.tab ? $stateParams.tab : 0;
@@ -196,4 +196,4 @@ function AdminController(UsersDataService, $mdSidenav, $http, $filter, $scope, $
       });   
   }         
 }
-export default [ 'UsersDataService', '$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$stateParams', '$state', '$mdDialog', '$mdMedia', '$window', AdminController ];
+export default [ '$mdSidenav', '$http', '$stateParams', '$state', '$mdDialog', '$window', AdminController ];

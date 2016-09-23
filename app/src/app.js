@@ -11,9 +11,8 @@ import AdminController from 'src/AdminController';
 import MainController from 'src/MainController';
 import LoginController from 'src/LoginController';
 import SignupController from 'src/SignupController';
-import Users from 'src/users/Users';
 
-export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.router', Users.name ] )
+export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.router'] )
   .config(($mdIconProvider, $mdThemingProvider, $httpProvider, $stateProvider, $urlRouterProvider) => {
     // Register the user `avatar` icons
     $mdIconProvider
