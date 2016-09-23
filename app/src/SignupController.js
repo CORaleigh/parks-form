@@ -8,7 +8,7 @@ function SignupController(UsersDataService, $mdSidenav, $http, $filter, $scope, 
   var self = this;
   self.signup = function (credentials) {
     credentials.email = credentials.email.toLowerCase();
-    $http.post('http://localhost:8081/parks-form-api/signup', credentials).then(function (result) {
+    $http.post('http://mapstest.raleighnc.gov/parks-form-api/signup', credentials).then(function (result) {
       if (result.data.success) {
         $state.go('login');
       } else {

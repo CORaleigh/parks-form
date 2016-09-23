@@ -13,7 +13,7 @@ function MainController(UsersDataService, $mdSidenav, $http, $filter, $rootScope
     $state.go('login');
     return false;    
   }
-  var api = 'http://localhost:8081/parks-form-api/';
+  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
   var creds = JSON.parse($window.localStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
