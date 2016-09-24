@@ -268,7 +268,7 @@
                     </h3>
                       <span flex></span>
                         <md-button  ng-show="$mdMedia('gt-sm')" ng-if="app.user.admin || app.user.email === entry.preparer" class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
-                        <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.copyEntry(entry)">Copy</md-button>                      
+                        <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.showCopyConfirm($event, entry)">Copy</md-button>                      
                         <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
                         <md-menu ng-hide="$mdMedia('gt-sm')">
                           <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">

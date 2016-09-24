@@ -13,7 +13,7 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
   }
 
 
-  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+  var api = 'http://localhost:8081/parks-form-api/';
   var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
@@ -229,10 +229,25 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
       
     });
   };
+  self.showCopyConfirm = function(ev, entry) {
+    var confirm = $mdDialog.confirm()
+          .title('This will create a new entry with the values of this entry, would you like to continue?')
+          .ariaLabel('Copy')
+          .targetEvent(ev)
+          .ok('Yes')
+          .cancel('Cancel');
 
+    $mdDialog.show(confirm).then(function() {
+      self.copyEntry(entry);
+    }, function() {
+      
+    });
+  };
   //handle cloning of entry
   self.copyEntry = function (entry) {
-    self.selectEntry(entry);   
+    self.selectEntry(entry); 
+    entry.preparer = self.user.email;
+    self.data.preparer = self.user.email;
     self.id = null;
     $timeout(function (){
       self.submit(true);
