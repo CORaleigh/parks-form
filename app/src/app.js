@@ -11,6 +11,8 @@ import AdminController from 'src/AdminController';
 import MainController from 'src/MainController';
 import LoginController from 'src/LoginController';
 import SignupController from 'src/SignupController';
+import ForgotController from 'src/ForgotController';
+import ResetController from 'src/ResetController';
 
 export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.router'] )
   .config(($mdIconProvider, $mdThemingProvider, $httpProvider, $stateProvider, $urlRouterProvider) => {
@@ -63,13 +65,28 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.r
         url: '/:tab',
         templateUrl: './templates/admin.html',
         params: {tab: 0, user: null, token: null}     
+    })
+    .state('forgot', {
+      url: '/forgot',
+      templateUrl: './templates/forgot.html'
+    })
+    .state('reset', {
+      url: '/reset/:token',
+      templateUrl: './templates/reset.html'
+    })    
+    .state('reset.token', {
+      url: '/reset/:token',
+      templateUrl: './templates/reset.html',
+      params: {token: null}
     });
   })
   .controller('AppController', AppController)
   .controller('AdminController', AdminController)
   .controller('MainController', MainController)
   .controller('LoginController', LoginController)
-  .controller('SignupController', SignupController)    
+  .controller('SignupController', SignupController)  
+  .controller('ForgotController', ForgotController)   
+  .controller('ResetController', ResetController)         
   .factory('location', [
     '$location',
     '$route',
