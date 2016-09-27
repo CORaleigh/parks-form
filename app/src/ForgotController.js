@@ -8,7 +8,7 @@ function ForgotController($mdSidenav, $http, $filter, $scope, $timeout, $locatio
   var self = this;
   self.forgot = function (email) {
     email = email.toLowerCase();
-    $http.post('http://localhost:8081/parks-form-api/forgot', {email: email}).then(function (result) {
+    $http.post('http://mapstest.raleighnc.gov/parks-form-api/forgot', {email: email}).then(function (result) {
       if (result.data.success) {
         $state.go('login');
         //$window.sessionStorage.setItem('credentials', JSON.stringify(result.data));

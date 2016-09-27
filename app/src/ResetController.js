@@ -10,7 +10,7 @@ function ResetController($mdSidenav, $http, $filter, $scope, $timeout, $location
   self.reset = function (credentials) {
     credentials.email = credentials.email.toLowerCase();
     credentials.token = $stateParams.token;
-    $http.post('http://localhost:8081/parks-form-api/reset', credentials).then(function (result) {
+    $http.post('http://mapstest.raleighnc.gov/parks-form-api/reset', credentials).then(function (result) {
       if (result.data.success) {
         console.log(result);
         $state.go('login', {user: result.data.user});
