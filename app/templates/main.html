@@ -13,19 +13,18 @@
         </md-list-item>    
         <md-list-item>
           <span>Cost Recovery (target)</span>
-          <span ng-hide="app.checkNaN(app.data.category.value)" class="md-secondary">{{(app.data.category.value * 100).toFixed(0)}}%</span>
-          <span ng-show="app.checkNaN(app.data.category.value)" class="md-secondary">--</span>            
+          <span ng-hide="app.checkNaN(app.data.service.value)" class="md-secondary">{{(app.data.service.value * 100).toFixed(0)}}%</span>
+          <span ng-show="app.checkNaN(app.data.service.value)" class="md-secondary">--</span>            
         </md-list-item> 
         <md-list-item>
           <span>Cost Recovery (projected)</span>
           <span ng-hide="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">{{((app.revenueEstimate / app.costEstimate) * 100).toFixed(0)}}%</span>
           <span ng-show="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">--</span>          
-        </md-list-item>  
-        {{app.data.comments}}                      
+        </md-list-item>                   
       </md-list>
-      <md-toolbar ng-hide="parkForm.$invalid" layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.category.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.category.value}">
+      <md-toolbar ng-hide="parkForm.$invalid" layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.service.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.service.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.service.value}">
         <div class="md-toolbar-tools">
-          <span>{{((app.revenueEstimate / app.costEstimate) < app.data.category.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.category.value) ? 'Needs Review' : 'Proceed'}}</span>
+          <span>{{((app.revenueEstimate / app.costEstimate) < app.data.service.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.service.value) ? 'Needs Review' : 'Proceed'}}</span>
         </div>
       </md-toolbar>
       <md-toolbar ng-show="parkForm.$invalid" layout="row" class="md-warn">
@@ -35,7 +34,7 @@
       </md-toolbar>      
       <br/>
       <div>
-        <md-button style="width:95%" ng-disabled="parkForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
+        <md-button style="width:95%" ng-disabled="parkForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin || app.data.personnel.length < 1" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
         <md-tooltip ng-if="parkForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin">{{app.user.email != app.data.preparer ? 'You cannot edit an entry you did not create' : 'All required fields must be entered before submitting'}}</md-tooltip>
       </div>
       <div>
@@ -58,10 +57,10 @@
             <md-content>
                 <md-input-container class="md-block" >
                   <label>Program Area</label>
-                  <md-select ng-required="true" ng-model="app.data.target" ng-change="app.data.category = null;app.targetSelected = true" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <md-select ng-required="true" ng-model="app.data.programArea" ng-change="app.programSelected = true" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                     <md-option><em>None</em></md-option>
-                    <md-option ng-repeat="target in app.targets | orderBy: 'name'" ng-value="target">
-                      {{target.name}}
+                    <md-option ng-repeat="program in app.programs | orderBy: 'name'" ng-value="program">
+                      {{program.name}}
                     </md-option>
                   </md-select>
                 </md-input-container>
@@ -73,10 +72,10 @@
      
                 <md-input-container class="md-block" >
                   <label>Category of Service</label>
-                  <md-select ng-required="true" ng-model="app.data.category" ng-disabled="(!app.targetSelected || app.user.email != app.data.preparer) && !app.user.admin ">
+                  <md-select ng-required="true" ng-model="app.data.service">
                     <md-option><em>None</em></md-option>
-                    <md-option ng-repeat="category in app.data.target.services | orderBy: 'name'" ng-value="category">
-                      {{category.name}}
+                    <md-option ng-repeat="service in app.services | orderBy: 'name'" ng-value="service">
+                      {{service.name}}
                     </md-option>
                   </md-select>
                 </md-input-container>
@@ -85,7 +84,6 @@
                 </md-checkbox>              
                 <md-input-container ng-if="app.data.cityFacility" class="md-block" >
                   <label>Facility Name</label>
-<!--                   <input ng-required="true" ng-model="app.data.facility" placeholder="Where will your program take place?"> -->
                  <md-select ng-required="true" ng-model="app.data.facility" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                     <md-option><em>None</em></md-option>
                     <md-option ng-repeat="facility in app.facilities | orderBy: 'name'" ng-value="facility">
@@ -101,16 +99,14 @@
                 <label>Start Date</label>
                 <md-datepicker ng-model="app.data.start" name="dateField" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin"></md-datepicker>
               </md-input-container>
-
-      
-                <md-input-container class="md-block" >
-                  <label>Comments</label>
-                  <input ng-model="app.data.comments" placeholder="Enter any comments" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
-                </md-input-container>
-                <md-input-container class="md-block" >
-                  <label>Prepared By</label>
-                  <input ng-disabled="true" ng-model="app.data.preparer"  ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
-                </md-input-container>                
+              <md-input-container class="md-block" >
+                <label>Comments</label>
+                <input ng-model="app.data.comments" placeholder="Enter any comments" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+              </md-input-container>
+              <md-input-container class="md-block" >
+                <label>Prepared By</label>
+                <input ng-disabled="true" ng-model="app.data.preparer"  ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+              </md-input-container>                
             </md-content>
           </md-tab>
           <md-tab label="revenue estimates">
@@ -119,7 +115,7 @@
                 <md-checkbox ng-model="app.data.newProgram" aria-label="Is this a new program?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                   Is this a new program?
                 </md-checkbox>
-                <md-checkbox ng-model="app.data.full" aria-label="Is this Program is Usually Full?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                <md-checkbox ng-model="app.data.full" aria-label="Is this Program Usually Full?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                   Is this Program is Usually Full?
                 </md-checkbox>                
               </div>           
@@ -267,7 +263,7 @@
                         {{entry.title}} at {{entry.facility}} ({{entry.start | date: 'M/d/yyyy'}})
                     </h3>
                       <span flex></span>
-                        <md-button  ng-show="$mdMedia('gt-sm')" ng-if="app.user.admin || app.user.email === entry.preparer" class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
+                        <md-button  ng-show="$mdMedia('gt-sm')" ng-if="app.user.admin" class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
                         <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.showCopyConfirm($event, entry)">Copy</md-button>                      
                         <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
                         <md-menu ng-hide="$mdMedia('gt-sm')">
@@ -316,7 +312,7 @@
                       <md-input-container class="" >
                         <label>Prepared By</label>
                         <br/>
-                        <p>{{app.data.preparer}}</p>
+                        <p>{{entry.preparer}}</p>
                       </md-input-container>                                              
                     </div>
                     <div layout="row"  layout-wrap>

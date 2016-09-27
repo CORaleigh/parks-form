@@ -13,7 +13,7 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
   }
 
 
-  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+  var api = 'http://localhost:8081/parks-form-api/';
   var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
@@ -37,30 +37,37 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
 
   $scope.$mdMedia = $mdMedia;
   //get Facilities, Targets, and Jobs from database
-  $http.get(api + "targets", {params: {token: token}}).then(function (response) {
+  $http.get(api + "programs", {params: {token: token}}).then(function (response) {
     if (response.data.success) {
-      self.targets = response.data.results;
+      self.programs = response.data.results;
     } else {
       $state.go('login', {message: response.data.message});
     }
-    $http.get(api + "facilities", {params: {token: token}}).then(function (response) {
+    $http.get(api + "services", {params: {token: token}}).then(function (response) {
       if (response.data.success) {
-        self.facilities = response.data.results;
+        self.services = response.data.results;
       } else {
         $state.go('login', {message: response.data.message});
-      }      
-      $http.get(api + "jobs", {params: {token: token}}).then(function (response) {
+      }    
+      $http.get(api + "facilities", {params: {token: token}}).then(function (response) {
         if (response.data.success) {
-          self.jobs = response.data.results;
+          self.facilities = response.data.results;
         } else {
           $state.go('login', {message: response.data.message});
-        }           
+        }      
+        $http.get(api + "jobs", {params: {token: token}}).then(function (response) {
+          if (response.data.success) {
+            self.jobs = response.data.results;
+          } else {
+            $state.go('login', {message: response.data.message});
+          }           
 
-        //if ID set in URL, select entry by id
-        if ($stateParams.id) {
-          self.getEntryById($stateParams.id);
-        }
-      });       
+          //if ID set in URL, select entry by id
+          if ($stateParams.id) {
+            self.getEntryById($stateParams.id);
+          }
+        });   
+      });             
     });    
   }); 
 
@@ -137,9 +144,9 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
     }
     console.log(self.data);
       $http.post(url, 
-        { programArea: self.data.target.name,
+        { programArea: self.data.programArea.name,
           title: self.data.title,
-          category: self.data.category,
+          category: self.data.service,
           cityFacility: self.data.cityFacility,
           facility: self.data.facility.name,
           start: self.data.start,
@@ -159,11 +166,11 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
           supplyAmt: self.data.supplyAmt,
           personnel: JSON.stringify(self.data.personnel),
           submitted: new Date(),
-          needsReview: ((self.revenueEstimate / self.costEstimate) < self.data.category.value) || self.checkNaN(self.revenueEstimate / self.costEstimate) || self.checkNaN(self.data.category.value),
+          needsReview: ((self.revenueEstimate / self.costEstimate) < self.data.service.value) || self.checkNaN(self.revenueEstimate / self.costEstimate) || self.checkNaN(self.data.service.value),
           revenue: self.revenueEstimate,
           cost: self.costEstimate,
           recoveryProjected: self.revenueEstimate / self.costEstimate,
-          recoveryTarget: self.data.category.value,
+          recoveryTarget: self.data.service.value,
           token: token
         }
     ).then(function (response) {
@@ -171,11 +178,15 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
         self.selectedTab = 1;
       } else {
         self.selectedTab = 4;
+        self.clear();
       }
       
       if (response.data.success) {
-        self.id = response.data._id;
-        $state.go('form.id', {id: self.id});
+        //if (!isCopy) {
+          self.id = response.data.results._id;
+          self.data._id = self.id;
+          $state.go('form.id', {id: self.id});
+        //}
       } else {
         $state.go('login', {message: response.data.message});
       }  
@@ -259,8 +270,8 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
    // location.skipReload().path(entry._id);
     $state.go('form.id', {id: entry._id});
     self.id = entry._id;
-    self.data.target = $filter('filter')(self.targets, entry.programArea)[0];
-    self.data.category = $filter('filter')(self.data.target.services, entry.category)[0];
+    self.data.programArea = $filter('filter')(self.programs, entry.programArea)[0];
+    self.data.service = $filter('filter')(self.services, entry.category)[0];
     self.data.title = entry.title;
     self.data.start = new Date(entry.start);
     self.data.cityFacility = entry.cityFacility;
@@ -281,7 +292,7 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
     self.data.supplyDesc = entry.supplyDesc;
     self.data.personnel = entry.personnel;
     self.selectedTab = 1;
-    self.targetSelected = true;
+    self.programSelected = true;
   }
 
   //clear form

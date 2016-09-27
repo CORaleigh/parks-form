@@ -7,7 +7,7 @@ function AdminController($mdSidenav, $http, $stateParams, $state, $mdDialog, $wi
     $state.go('login');
     return false;    
   }
-  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+  var api = 'http://localhost:8081/parks-form-api/';
   var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
@@ -39,15 +39,27 @@ function AdminController($mdSidenav, $http, $stateParams, $state, $mdDialog, $wi
       }
 	  });
   }
-  if (!self.targets) {
-   $http.get(api + "targets", {params: {token: token}}).then(function (response) {
+  if (!self.programs) {
+   $http.get(api + "programs", {params: {token: token}}).then(function (response) {
     if (response.data.success) {
-    self.targets = response.data.results;
+    self.programs = response.data.results;
     } else {
         $state.go('login', {message: response.data.message});
     }
    });  	
   } 
+  if (!self.services) {
+   $http.get(api + "services", {params: {token: token}}).then(function (response) {
+    if (response.data.success) {
+      self.services = response.data.results;
+      for (var i = 0; i < self.services.length; i ++) {
+        self.services[i].value *= 100;
+      }
+    } else {
+        $state.go('login', {message: response.data.message});
+    }
+   });    
+  }   
    $http.get(api + "users", {params: {token: token}}).then(function (response) {
     if (response.data.success) {
     self.users = response.data.results;
@@ -65,28 +77,28 @@ function AdminController($mdSidenav, $http, $stateParams, $state, $mdDialog, $wi
       });      
     }
   } 
-  self.addTarget = function () {
-    if (self.newTarget) {
-      var url = api + "targets";
-      $http.post(url, {name: self.newTarget, token: token}).then(function (response) {
-        self.targets.push({name: self.newTarget, _id: response.data._id, services: []});
-        self.newTarget = null;
+  self.addProgram = function () {
+    if (self.newProgram) {
+      var url = api + "programs";
+      $http.post(url, {name: self.newProgram, token: token}).then(function (response) {
+        self.programs.push({name: self.newProgram, _id: response.data._id});
+        self.newProgram = null;
       });      
     }
   }
-  self.addService = function (target) {
-    if (target.newServiceName && target.newServiceValue) {
-      var url = api + "targets/" + target._id;
-      $http.post(url, {name: target.newServiceName, value: target.newServiceValue, token: token}).then(function (response) {
-        target.services.push({name: target.newServiceName, value: target.newServiceValue});
-        target.newServiceName = null;
-        target.newServiceValue = null;
+  self.addService = function (service) {
+    if (self.newServiceName && self.newServiceValue) {
+      var url = api + "services";///" + service._id;
+      $http.post(url, {name: self.newServiceName, value: self.newServiceValue / 100, token: token}).then(function (response) {
+        self.services.push({name: self.newServiceName, value: self.newServiceValue});
+        self.newServiceName = null;
+        self.newServiceValue = null;
       });
     }
   }  
   self.updateService = function (service) {
-      var url = api + "targets/service/" + service._id;
-      $http.post(url, {name: service.name, value: service.value, token: token}).then(function (response) {
+      var url = api + "services/" + service._id;
+      $http.post(url, {name: service.name, value: service.value / 100, token: token}).then(function (response) {
         //self.targets.push({name: self.newTarget});
         //self.newTarget = null;
       });      
@@ -116,14 +128,14 @@ function AdminController($mdSidenav, $http, $stateParams, $state, $mdDialog, $wi
         case 'facility':
           self.deleteFacility(item);
         break;
-        case 'target':
-          self.deleteTarget(item);
+        case 'program':
+          self.deleteProgram(item);
         break;
         case 'job':
           self.deleteJob(item);
         break;
         case 'service':
-          self.deleteService(item, item2)
+          self.deleteService(item)
         break;
         case 'user':
           self.deleteUser(item);
@@ -156,25 +168,26 @@ function AdminController($mdSidenav, $http, $stateParams, $state, $mdDialog, $wi
       self.jobs.splice(index, 1);
     });     
   }
-  self.deleteTarget = function (target) {
+  self.deleteProgram = function (program) {
     $http({
         method: 'DELETE',
-        url: api + 'targets',
-        data: {id: target._id, token: token},
+        url: api + 'programs',
+        data: {id: program._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
-      var index = self.targets.indexOf(target);
-      self.targets.splice(index, 1);
+      var index = self.programs.indexOf(program);
+      self.programs.splice(index, 1);
     });     
   }  
-  self.deleteService = function (service, target) {
+  self.deleteService = function (service) {
     $http({
         method: 'DELETE',
-        url: api + 'targets/service/' + service._id,
+        url: api + 'services',
+        data: {id: service._id, token: token},
         headers: {'Content-Type': 'application/json;charset=utf-8'}
     }).then(function (results) {
-      var index = target.services.indexOf(service);
-      target.services.splice(index, 1);
+      var index = self.services.indexOf(service);
+      self.services.splice(index, 1);
     }); 
   }
   self.deleteUser = function (user) {

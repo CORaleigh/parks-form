@@ -206,3 +206,13 @@ label {
 md-list:nth-child(2) {
     background: rgba(200,200,200);
 }
+
+.percent {
+  font-size: 16pt;
+  margin-left: -0.5em;
+  padding-bottom: 1em;
+  padding-right: 1em;
+}
+.value-input {
+  text-align: right;
+}
