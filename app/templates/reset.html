@@ -1,5 +1,5 @@
 <div flex layout="row" layout-align="center center" ng-controller="ResetController as reset">
-<form ng-submit="reset.reset(reset.credentials)">
+<form class="user-form" ng-submit="reset.reset(reset.credentials)">
 	<md-input-container class="md-block" >
 	  <label>Email</label>
 	  <input type="email" ng-required="true" ng-model="reset.credentials.email" placeholder="Enter your email address">

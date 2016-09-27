@@ -216,6 +216,6 @@ md-list:nth-child(2) {
 .value-input {
   text-align: right;
 }
-form md-input-container {
+.user-form md-input-container {
   min-width: 300px;
 }

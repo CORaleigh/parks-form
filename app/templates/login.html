@@ -1,5 +1,5 @@
 <div flex layout="row" layout-align="center center" ng-controller="LoginController as login">
-<form ng-submit="login.login(login.credentials)">
+<form class="user-form" ng-submit="login.login(login.credentials)">
 	<md-input-container class="md-block" >
 	  <label>Email</label>
 	  <input type="email" ng-required="true" ng-model="login.credentials.email">
