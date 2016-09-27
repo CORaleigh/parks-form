@@ -16,7 +16,7 @@ function AdminController($mdSidenav, $http, $stateParams, $state, $mdDialog, $wi
   self.tabSelected = function (index) {
   	if (!self.user)
       return false;
-  	$state.go('admin.tab', {tab: index, user: self.user});
+  	//$state.go('admin.tab', {tab: index, user: self.user});
   }
   if (!token) {
     return false;
