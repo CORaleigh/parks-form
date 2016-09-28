@@ -357,19 +357,39 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
     }
   };
 
+  var getMaxStaff = function (data) {
+    var max = 0
+    for (var i = 0; i < data.length; i++) {
+      if (data.personnel) {
+        if (data.personnel.length > max) {
+          max = data.personnel.length;
+        }
+      }
+    }
+    return max;
+  }
 
   var convertCsv = function (data, headers) {
     var result, columnDelimiter, lineDelimiter;
     result = '';
     columnDelimiter = ',';
     lineDelimiter = '\n';
+    var maxStaff = getMaxStaff(data);    
     for (var i = 0; i < headers.length; i++) {
       result += headers[i].display;
       result += columnDelimiter;
     }
+    for (var i = 0; i < maxStaff; i++) {
+      result += "Staff Title " + (i + 1) + ",";
+      result += "Staff Pay Type " + (i + 1) + ","; 
+      result += "Staff Status " + (i + 1) + ",";  
+      result += "Staff Pay Rate " + (i + 1) + ",";   
+      result += "Staff Count " + (i + 1);            
+    }
   
     result += lineDelimiter;   
-    var item = {};
+    var item = {}, personnel = {};
+
     for (var i = 0; i < data.length; i++) {
       item = data[i];
       for (var j = 0; j < headers.length; j++) {
@@ -383,8 +403,23 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
         } else {
           result += columnDelimiter;
         }
-               
+
       }
+      if (item.personnel) {
+        for (var j = 0; j < item.personnel.length;j++) {
+          personnel = item.personnel[j];
+          result += personnel.title;
+          result += columnDelimiter;
+          result += personnel.payType;
+          result += columnDelimiter;
+          result += personnel.status;
+          result += columnDelimiter;
+          result += personnel.rate;
+          result += columnDelimiter;
+          result += personnel.count;
+          result += columnDelimiter;                                        
+        }
+      }      
       result += lineDelimiter;
     }
     return result;
