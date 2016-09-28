@@ -360,9 +360,9 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
   var getMaxStaff = function (data) {
     var max = 0
     for (var i = 0; i < data.length; i++) {
-      if (data.personnel) {
-        if (data.personnel.length > max) {
-          max = data.personnel.length;
+      if (data[i].personnel) {
+        if (data[i].personnel.length > max) {
+          max = data[i].personnel.length;
         }
       }
     }
