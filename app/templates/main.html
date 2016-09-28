@@ -310,12 +310,12 @@
                         <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.showCopyConfirm($event, entry)">Copy</md-button>                      
                         <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
                         <md-menu ng-hide="$mdMedia('gt-sm')">
-                          <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                          <md-button aria-label="Open actions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
                             <md-icon md-menu-origin md-svg-icon="more"></md-icon>
                           </md-button>
                           <md-menu-content>
                               <md-menu-item ng-if="app.user.admin || app.user.email === app.data.preparer">
-                                <md-button ng-class="md-warn" ng-click="app.showConfirm($event, entry)">
+                                <md-button ng-class="md-warn" ng-click="app.showConfirm($event, entry)" ng-if="app.user.admin">
                                 Delete
                                 </md-button>
                               </md-menu-item>
