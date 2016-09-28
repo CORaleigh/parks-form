@@ -256,6 +256,49 @@
           </md-tab>
           <md-tab label="history" md-on-select="app.getHistory()">
             <md-content class="md-padding">
+            <div ng-show="app.showFilter">
+              <div layout="row" layout-wrap>
+                <md-input-container class="md-block" >
+                  <label>Program Area</label>
+                  <md-select ng-model="app.filter.programArea" ng-change="app.getHistory()">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="program in app.programs | orderBy: 'name'" ng-value="program">
+                      {{program.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" >
+                  <label>Category of Service</label>
+                  <md-select ng-model="app.filter.service" ng-change="app.getHistory()">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="service in app.services | orderBy: 'name'" ng-value="service">
+                      {{service.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container> 
+
+              <md-input-container class="md-block">
+                <label>Submitted After</label>
+                <md-datepicker ng-model="app.filter.from" name="dateField" md-hide-icons="calendar"></md-datepicker>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Submitted Before</label>
+                <md-datepicker ng-model="app.filter.to" name="dateField"  md-hide-icons="calendar"></md-datepicker>
+              </md-input-container>                                                                                
+              </div>
+              <div layout="row" layout-wrap ng-show="app.showFilter">
+                <md-input-container class="md-block" style="min-width: 200px;">
+                  <label>Title or Facility</label>
+                  <input ng-change="app.titleFilterChanged(app.filter.title)" ng-model="app.filter.title" placeholder="Contains this text"></input>
+                </md-input-container>              
+                <md-checkbox class="filter-check" layout="row" layout-wrap ng-model="app.filter.me" aria-label="Created by me" ng-change="app.getHistory()">
+                  Created by me
+                </md-checkbox>
+
+              </div>
+              </div>
+                <md-button class="md-primary" type="button" ng-click="app.showFilter = !app.showFilter">{{app.showFilter ? 'Hide Filter' : 'Show Filter'}}</md-button>              
+                <md-button class="md-primary" type="button" ng-click="app.exportCsv()">Export</md-button>
               <md-card class="history-card" ng-repeat="entry in app.history">
                <md-toolbar layout-wrap ng-if="true">
                   <div layout="row" class="md-toolbar-tools">
@@ -292,7 +335,6 @@
                 </md-toolbar>              
                 <md-card-title>
                   <md-card-title-text>
-
                     <div layout="row"  layout-wrap>
                       <md-input-container class="" >
                         <label>Program Area</label>

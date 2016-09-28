@@ -13,7 +13,7 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
   }
 
 
-  var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+  var api = 'http://localhost:8081/parks-form-api/';
   var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
   var token = creds.token;
   self.user = creds.user;
@@ -28,7 +28,15 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
   self.statuses = [{name: "Contractor"},{name: "Payroll"}];    
   self.data = {default: true, preparer: self.user.email, target: {}, personnel: [{visible: true, cost: null}], cityFacility: true, full: false, newProgram: false, comments: ''};
   self.costEstimate = 0;
-  self.revenueEstimate = 0;  
+  self.revenueEstimate = 0;
+
+  var today = new Date();
+  var tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+  var lastYear =  new Date();
+  lastYear.setMonth(lastYear.getMonth() - 12);
+  self.filter = {me: true, from : lastYear, to: tomorrow, title:""};  
+  self.showFilter = true;
   $timeout(function (){
     if ($window.sessionStorage.getItem('data')) {
       self.data = JSON.parse($window.sessionStorage.getItem('data'));  
@@ -195,11 +203,46 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
     });
   }
 
+  var formatDate = function (date) {
+    var y = date.getFullYear(),
+      mo = date.getMonth() + 1,
+      d = date.getDate();
+    if (mo < 10) {
+      mo = "0" + mo;
+    }
+    return y+"-"+mo+"-"+d+" 00:00:00";
+  }
+
+  self.titleFilterChanged = function (title) {
+    if (title.length)
+      self.getHistory();
+  }
   //get all entries when History tab selected
   self.getHistory = function () {
-    $http.get(api + "form", {params:{token: token}}).then(function (response) {
+    var where = {submitted:{}};
+    if (self.filter.me)
+      where.preparer = self.user.email;
+    if (self.filter.from)
+      where.submitted.$gte = formatDate(self.filter.from);
+    if (self.filter.to)
+      where.submitted.$lte = formatDate(self.filter.to);    
+    if (self.filter.programArea)
+      where.programArea = self.filter.programArea.name;
+
+    if (self.filter.service)
+      where['category.name'] = self.filter.service.name;
+    if (self.filter.title) {
+      where.$or = [{title: {$regex: ".*" + self.filter.title + ".*", $options: "i"}},{facility: {$regex: ".*" + self.filter.title + ".*", $options: "i"}}];
+    }
+    $http.get(api + "form", {params:{token: token, where: where}}).then(function (response) {
       if (response.data.success) {
         self.history = response.data.results;
+      //  self.exportArray = [];
+        for (var i = 0; i < self.history.length; i++) {
+       //   self.exportArray.push([self.history[i].title]);
+
+        }
+        console.log(self.exportArray);
       } else {
         $state.go('login', {message: response.data.message});
       }        
@@ -297,10 +340,11 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
 
   //clear form
   self.clear = function () {
-    self.data = {preparer: self.user.email,target: {}, personnel: [{}], full: false, newProgram: false, comments: '', facility: ''};
+    self.data = {default: true, preparer: self.user.email, target: {}, personnel: [{visible: true, cost: null}], cityFacility: true, full: false, newProgram: false, comments: ''};
     self.id = null;
     self.selectedTab = 1;
     $window.sessionStorage.removeItem('data');
+    $state.go('form');
   }
 
   //handle collapsing/expanding of personnel cards
@@ -312,6 +356,78 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
       }
     }
   };
+
+
+  var convertCsv = function (data, headers) {
+    var result, columnDelimiter, lineDelimiter;
+    result = '';
+    columnDelimiter = ',';
+    lineDelimiter = '\n';
+    for (var i = 0; i < headers.length; i++) {
+      result += headers[i].display;
+      result += columnDelimiter;
+    }
+  
+    result += lineDelimiter;   
+    var item = {};
+    for (var i = 0; i < data.length; i++) {
+      item = data[i];
+      for (var j = 0; j < headers.length; j++) {
+        if (item[headers[j].field] != undefined) {
+          if (headers[j].subField) {
+            result += item[headers[j].field][headers[j].subField];
+          } else {
+            result += item[headers[j].field];
+          }
+          result += columnDelimiter;           
+        } else {
+          result += columnDelimiter;
+        }
+               
+      }
+      result += lineDelimiter;
+    }
+    return result;
+  }
+  self.exportCsv = function () {
+    console.log(self.history);
+      var headers = [
+        {field: 'title', display: 'Title'},
+        {field: 'programArea', display: 'Program Area'},
+        {field: 'category', subField:'name', display: 'Category of Service'},
+        {field: 'facility', display: 'Facility'},
+        {field: 'preparer', display: 'Prepared By'},
+        {field: 'submitted', display: 'Submitted'},
+        {field: 'start', display:'Start Date'},
+        {field: 'comments', display: 'Comments'},
+        {field: 'newProgram', display: 'New Program'},
+        {field: 'full', display: 'Usually Full?'},
+        {field: 'hours', display: 'Hours Per Week'},
+        {field: 'weeks', display: 'Weeks'},
+        {field: 'minParticipants', display: 'Min # of Participants'},
+        {field: 'maxParticipants', display: 'Max # of Participants'},
+        {field: 'residentialRate', display: 'Residential Rate'},
+        {field: 'nonResidentialRate', display: 'Non-Residential Rate'},
+        {field: 'altRevDesc', display: 'Alternative Revenue'},
+        {field: 'altRevAmt', display: 'Alternative Revenue Amount'},
+        {field: 'supplyDesc', display: 'Supplies'},
+        {field: 'supplyAmt', display: 'Supplies Amount'},
+        {field: 'revenue', display: 'Revenue Estimate'},
+        {field: 'cost', display: 'Cost Estimate'},
+        {field: 'recoveryTarget', display: 'Cost Recovery (target)'},
+        {field: 'recoveryProjected', display: 'Cost Recovery (projected)'}        
+      ];
+      var data, filename, link;
+      var csv = convertCsv(self.history, headers);
+      filename = 'pricingForm.csv';
+      csv = 'data:text/csv;charset=utf-8,' + csv;
+      data = encodeURI(csv);
+      link = document.createElement('a');
+      link.setAttribute('href', data);
+      link.setAttribute('download', filename);
+      link.click();
+  }
+
 
   // $rootScope.$watchCollection(function() {
   //   return this.data

@@ -5,7 +5,6 @@ import 'angular-animate';
 import 'angular-aria';
 import 'angular-material';
 import 'angular-ui-router';
-
 import AppController from 'src/AppController';
 import AdminController from 'src/AdminController';
 import MainController from 'src/MainController';
