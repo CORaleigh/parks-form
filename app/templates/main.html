@@ -57,7 +57,8 @@
             <md-content>
                 <md-input-container class="md-block" >
                   <label>Program Area</label>
-                  <md-select ng-required="true" ng-model="app.data.programArea" ng-change="app.programSelected = true" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admi
+                  <md-select ng-required="true" ng-model="app.data.programArea" ng-change="app.programSelected = true" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                    
                     <md-option ng-repeat="program in app.programs | orderBy: 'name'" ng-value="program">
                       {{program.name}}
                     </md-option>
@@ -71,7 +72,8 @@
      
                 <md-input-container class="md-block" >
                   <label>Category of Service</label>
-                  <md-select ng-required="true" ng-model="app.data.servic
+                  <md-select ng-required="true" ng-model="app.data.service">
+                    
                     <md-option ng-repeat="service in app.services | orderBy: 'name'" ng-value="service">
                       {{service.name}}
                     </md-option>
@@ -82,7 +84,8 @@
                 </md-checkbox>              
                 <md-input-container ng-if="app.data.cityFacility" class="md-block" >
                   <label>Facility Name</label>
-                 <md-select ng-required="true" ng-model="app.data.facility" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admi
+                 <md-select ng-required="true" ng-model="app.data.facility" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                    
                     <md-option ng-repeat="facility in app.facilities | orderBy: 'name'" ng-value="facility">
                       {{facility.name}}
                     </md-option>
@@ -211,6 +214,7 @@
                     <md-input-container class="md-block" >
                       <label>Job Title</label>
                       <md-select ng-required="true" ng-model="app.data.personnel[$index].title" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        
                         <md-option ng-repeat="job in app.jobs" ng-value="job.name">
                           {{job.name}}
                         </md-option>
@@ -219,6 +223,7 @@
                     <md-input-container class="md-block" >
                       <label>Pay Type</label>
                       <md-select ng-required="true" ng-model="app.data.personnel[$index].payType" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        
                         <md-option ng-repeat="type in app.payTypes" ng-value="type.name">
                           {{type.name}}
                         </md-option>
@@ -227,6 +232,7 @@
                     <md-input-container class="md-block" >
                       <label>Status</label>
                       <md-select ng-required="true" ng-model="app.data.personnel[$index].status" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        
                         <md-option ng-repeat="status in app.statuses" ng-value="status.name">
                           {{status.name}}
                         </md-option>
@@ -254,7 +260,8 @@
               <div layout="row" layout-wrap>
                 <md-input-container class="md-block" >
                   <label>Program Area</label>
-                  <md-select ng-model="app.filter.programArea" ng-change="app.getHistory(
+                  <md-select ng-model="app.filter.programArea" ng-change="app.getHistory()">
+                    
                     <md-option ng-repeat="program in app.programs | orderBy: 'name'" ng-value="program">
                       {{program.name}}
                     </md-option>
@@ -262,7 +269,8 @@
                 </md-input-container>
                 <md-input-container class="md-block" >
                   <label>Category of Service</label>
-                  <md-select ng-model="app.filter.service" ng-change="app.getHistory(
+                  <md-select ng-model="app.filter.service" ng-change="app.getHistory()">
+                    
                     <md-option ng-repeat="service in app.services | orderBy: 'name'" ng-value="service">
                       {{service.name}}
                     </md-option>
