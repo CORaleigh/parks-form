@@ -10,7 +10,7 @@ function ForgotController($mdSidenav, $http, $filter, $scope, $timeout, $locatio
     email = email.toLowerCase();
     $http.post('http://mapstest.raleighnc.gov/parks-form-api/forgot', {email: email}).then(function (result) {
       if (result.data.success) {
-        $state.go('login');
+        $state.go('login', {email: email});
         //$window.sessionStorage.setItem('credentials', JSON.stringify(result.data));
       } else {
         showToast(result.data.msg);

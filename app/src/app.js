@@ -40,7 +40,7 @@ export default angular.module( 'starter-app', [ 'ngMaterial', 'ngAnimate', 'ui.r
     .state('login', {
       url: '/login', 
       templateUrl: './templates/login.html',
-      params: {message: null}
+      params: {message: null, email: null}
     })
     .state('signup', {
       url: '/signup', 

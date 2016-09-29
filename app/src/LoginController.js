@@ -6,6 +6,8 @@
  */
 function LoginController($mdSidenav, $http, $filter, $scope, $timeout, $location, $state, $stateParams, $mdToast, $window) {
   var self = this;
+  if ($stateParams.email)
+    self.credentials = {email: $stateParams.email};
   self.login = function (credentials) {
     credentials.email = credentials.email.toLowerCase();
     $http.post('http://mapstest.raleighnc.gov/parks-form-api/login', credentials).then(function (result) {
