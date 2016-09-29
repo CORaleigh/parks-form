@@ -380,11 +380,16 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
       result += columnDelimiter;
     }
     for (var i = 0; i < maxStaff; i++) {
-      result += "Staff Title " + (i + 1) + ",";
-      result += "Staff Pay Type " + (i + 1) + ","; 
-      result += "Staff Status " + (i + 1) + ",";  
-      result += "Staff Pay Rate " + (i + 1) + ",";   
-      result += "Staff Count " + (i + 1);            
+      result += "Staff Title " + (i + 1);
+      result += columnDelimiter;
+      result += "Staff Pay Type " + (i + 1);
+      result += columnDelimiter; 
+      result += "Staff Status " + (i + 1); 
+      result += columnDelimiter; 
+      result += "Staff Pay Rate " + (i + 1);
+      result += columnDelimiter;   
+      result += "Staff Count " + (i + 1); 
+      result += columnDelimiter;           
     }
   
     result += lineDelimiter;   
