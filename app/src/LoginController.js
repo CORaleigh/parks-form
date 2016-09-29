@@ -12,7 +12,7 @@ function LoginController($http, $state, $stateParams, $mdToast, $window) {
     }
     self.login = function (credentials) {
         credentials.email = credentials.email.toLowerCase();
-        $http.post('http://localhost:8081/parks-form-api/login', credentials).then(function (result) {
+        $http.post('http://mapstest.raleighnc.gov/parks-form-api/login', credentials).then(function (result) {
             if (result.data.success) {
                 $state.go('form', {user: result.data.user, token: result.data.token});
                 $window.sessionStorage.setItem('credentials', JSON.stringify(result.data));
