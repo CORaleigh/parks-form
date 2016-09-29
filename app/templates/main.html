@@ -51,6 +51,9 @@
           <md-tab label="instructions">
             <md-content class="md-padding">
               <h2 style="font-weight: normal">Welcome {{app.user.email}}</h2>
+              <div layout="row" layout-wrap>           
+                <md-button class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>              
+              </div>              
             </md-content>
           </md-tab>
           <md-tab label="general information">
@@ -108,6 +111,10 @@
                 <input ng-disabled="true" ng-model="app.data.preparer"  ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
               </md-input-container>                
             </md-content>
+              <div layout="row" layout-wrap>
+                <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>                
+                <md-button class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>              
+              </div>            
           </md-tab>
           <md-tab label="revenue estimates">
             <md-content class="md-padding">
@@ -172,6 +179,10 @@
                   <label>Amount</label>
                   <input ng-min="0" type="number" ng-model="app.data.altRevAmt" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                 </md-input-container>
+              <div layout="row" layout-wrap>
+                <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>                
+                <md-button class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>              
+              </div>                
             </md-content>
           </md-tab>
           <md-tab label="cost estimates">
@@ -252,6 +263,10 @@
                 </md-card-actions>
                 </div>
               </md-card>
+              <div layout="row" layout-wrap>
+                <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>                
+                <md-button class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>              
+              </div>
             </md-content>
           </md-tab>
           <md-tab label="history" md-on-select="app.getHistory()">
@@ -383,7 +398,10 @@
                   </md-card-title-text>
                 </md-card-title>
               </md-card>                                             
-            </md-list>              
+            </md-list>          
+              <div layout="row" layout-wrap>
+                <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>             
+              </div>                
             </md-content>
           </md-tab>                        
         </md-tabs>

@@ -468,6 +468,12 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
       link.click();
   }
 
+  self.backTab = function () {
+    self.selectedTab -= 1;
+  };
+  self.nextTab = function () {
+    self.selectedTab += 1;
+  };
 
   // $rootScope.$watchCollection(function() {
   //   return this.data
