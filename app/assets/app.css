@@ -222,4 +222,15 @@ md-list:nth-child(2) {
 .filter-check .md-label {
   margin-top: 30px;
 }
-
+md-progress-linear {
+  position: absolute;
+  top: 48px;
+  z-index: 1000;
+}
+@media (min-width: 960px) {
+  md-progress-linear {
+    position: absolute;
+    top: 64px;
+    z-index: 1000;
+  }
+}
