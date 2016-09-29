@@ -4,25 +4,26 @@
  * @param $mdSidenav
  * @constructor
  */
-function ForgotController($mdSidenav, $http, $filter, $scope, $timeout, $location, $state, $stateParams, $mdToast, $window) {
-  var self = this;
-  self.forgot = function (email) {
-    email = email.toLowerCase();
-    $http.post('http://mapstest.raleighnc.gov/parks-form-api/forgot', {email: email}).then(function (result) {
-      if (result.data.success) {
-        $state.go('login', {email: email});
-        //$window.sessionStorage.setItem('credentials', JSON.stringify(result.data));
-      } else {
-        showToast(result.data.msg);
-      }
-    });
-  }; 
-  var showToast = function (message) {
-    var toast = $mdToast.simple().position('top').textContent(message);
-    $mdToast.show(toast);
-  };
+function ForgotController($http, $state, $stateParams, $mdToast) {
+    'use strict';
+    var self = this;
+    self.forgot = function (email) {
+        email = email.toLowerCase();
+        $http.post('http://localhost:8081/parks-form-api/forgot', {email: email}).then(function (result) {
+            if (result.data.success) {
+                $state.go('login', {email: email});
+            } else {
+                self.showToast(result.data.msg);
+            }
+        });
+    };
+    self.showToast = function (message) {
+        var toast = $mdToast.simple().position('top').textContent(message);
+        $mdToast.show(toast);
+    };
 
-  if ($stateParams.message)
-    showToast($stateParams.message);
+    if ($stateParams.message) {
+        self.showToast($stateParams.message);
+    }
 }
-export default ['$mdSidenav', '$http', '$filter', '$scope',  '$timeout', '$location', '$state', '$stateParams', '$mdToast', '$window', ForgotController ];
+export default ['$http', '$state', '$stateParams', '$mdToast', ForgotController];
