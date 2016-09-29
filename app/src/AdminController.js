@@ -202,4 +202,4 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
         };
     };
 }
-export default ['$mdSidenav', '$http', '$stateParams', '$state', '$mdDialog', '$window', AdminController];
+export default ['$http', '$stateParams', '$state', '$mdDialog', '$window', AdminController];

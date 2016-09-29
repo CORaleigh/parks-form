@@ -276,7 +276,7 @@
                     <md-input-container class="md-block" >
                       <label>Program Area</label>
                       <md-select ng-model="app.filter.programArea" ng-change="app.getHistory()">
-
+                        <md-option><em>None</em></md-option>
                         <md-option ng-repeat="program in app.programs | orderBy: 'name'" ng-value="program">
                           {{program.name}}
                         </md-option>
@@ -285,7 +285,7 @@
                     <md-input-container class="md-block" >
                       <label>Category of Service</label>
                       <md-select ng-model="app.filter.service" ng-change="app.getHistory()">
-
+                        <md-option><em>None</em></md-option>
                         <md-option ng-repeat="service in app.services | orderBy: 'name'" ng-value="service">
                           {{service.name}}
                         </md-option>
