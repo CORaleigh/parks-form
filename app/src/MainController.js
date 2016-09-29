@@ -242,7 +242,6 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
        //   self.exportArray.push([self.history[i].title]);
 
         }
-        console.log(self.exportArray);
       } else {
         $state.go('login', {message: response.data.message});
       }        
@@ -299,7 +298,7 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
   };
   //handle cloning of entry
   self.copyEntry = function (entry) {
-    self.selectEntry(entry); 
+    self.selectEntry(entry, true); 
     entry.preparer = self.user.email;
     self.data.preparer = self.user.email;
     self.id = null;
@@ -309,7 +308,7 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
   }
 
   //handle select button click
-  self.selectEntry = function (entry) {
+  self.selectEntry = function (entry, isCopy) {
    // location.skipReload().path(entry._id);
     $state.go('form.id', {id: entry._id});
     self.id = entry._id;
@@ -334,7 +333,8 @@ function MainController($mdSidenav, $http, $filter, $rootScope,$scope, $timeout,
     self.data.supplyAmt = entry.supplyAmt;
     self.data.supplyDesc = entry.supplyDesc;
     self.data.personnel = entry.personnel;
-    self.selectedTab = 1;
+    if (!isCopy)
+      self.selectedTab = 1;
     self.programSelected = true;
   }
 

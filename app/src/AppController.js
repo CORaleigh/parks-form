@@ -35,6 +35,17 @@ function AppController($mdSidenav, $http, $filter, $rootScope, $scope, $timeout,
   self.toggleList = function () {
     $mdSidenav('left').toggle();
   };
-  $scope.$mdMedia = $mdMedia
+  $scope.$mdMedia = $mdMedia;
+
+  $rootScope.$watch(function() {
+      return $http.pendingRequests.length;
+  }, function(status) {
+      if (status === 0) {
+        self.loading = false;
+      } else if (status === 1) {
+        self.loading = true;
+      }
+  });
+
 }
 export default [ '$mdSidenav', '$http', '$filter', '$rootScope', '$scope', '$timeout', '$location', '$state', '$mdMedia', '$window', AppController ];
