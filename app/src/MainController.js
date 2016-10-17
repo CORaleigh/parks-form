@@ -497,9 +497,9 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             for (j = 0; j < headers.length; j += 1) {
                 if (item[headers[j].field] !== undefined) {
                     if (headers[j].subField) {
-                        result += item[headers[j].field][headers[j].subField];
+                        result += '"' + item[headers[j].field][headers[j].subField] + '"';
                     } else {
-                        result += item[headers[j].field];
+                        result += '"' + item[headers[j].field] + '"';
                     }
                     result += columnDelimiter;
                 } else {
@@ -510,16 +510,16 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             if (item.personnel) {
                 for (j = 0; j < item.personnel.length; j += 1) {
                     personnel = item.personnel[j];
-                    result += personnel.title;
-                    result += columnDelimiter;
-                    result += personnel.payType;
-                    result += columnDelimiter;
-                    result += personnel.status;
-                    result += columnDelimiter;
-                    result += personnel.rate;
-                    result += columnDelimiter;
-                    result += personnel.count;
-                    result += columnDelimiter;
+                    result += '"' + personnel.title + '"';
+                    result += '"' + columnDelimiter + '"';
+                    result += '"' + personnel.payType + '"';
+                    result += '"' + columnDelimiter + '"';
+                    result += '"' + personnel.status + '"';
+                    result += '"' + columnDelimiter + '"';
+                    result += '"' + personnel.rate + '"';
+                    result += '"' + columnDelimiter + '"';
+                    result += '"' + personnel.count + '"';
+                    result += '"' + columnDelimiter + '"';
                 }
             }
             result += lineDelimiter;
