@@ -341,7 +341,15 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             }
         });
     };
-
+    self.showSelectButton = function (start) {
+        if (!$mdMedia('gt-sm')) {
+            return false;
+        }
+        if (new Date(start) <= new Date()) {
+            return false;
+        }
+        return true;
+    };
     //get entry by ID
     self.getEntryById = function (id) {
         $http.get(api + "form/" + id, {

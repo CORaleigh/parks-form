@@ -324,7 +324,7 @@
                     <span flex></span>
                     <md-button  ng-show="$mdMedia('gt-sm')" ng-if="app.user.admin" class="md-raised md-warn" ng-click="app.showConfirm($event, entry)">Delete</md-button>                       
                     <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.showCopyConfirm($event, entry)">Copy</md-button>                      
-                    <md-button ng-show="$mdMedia('gt-sm')" class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
+                    <md-button ng-show="app.showSelectButton(entry.start)" class="md-raised" ng-click="app.selectEntry(entry)">Select</md-button>
                     <md-menu ng-hide="$mdMedia('gt-sm')">
                       <md-button aria-label="Open actions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
                         <md-icon md-menu-origin md-svg-icon="more"></md-icon>
