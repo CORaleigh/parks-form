@@ -22,20 +22,20 @@
         <span ng-show="app.checkNaN(app.revenueEstimate / app.costEstimate)" class="md-secondary">--</span>          
       </md-list-item>   
     </md-list>
-    <md-toolbar ng-hide="parkForm.$invalid" layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.service.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.service.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.service.value}">
+    <md-toolbar ng-hide="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid " layout="row" ng-class="{'md-warn': (app.revenueEstimate / app.costEstimate) < app.data.service.value || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.service.value), 'md-primary': (app.revenueEstimate / app.costEstimate) >= app.data.service.value}">
       <div class="md-toolbar-tools">
         <span>{{((app.revenueEstimate / app.costEstimate) < app.data.service.value) || app.checkNaN(app.revenueEstimate / app.costEstimate) || app.checkNaN(app.data.service.value) ? 'Needs Review' : 'Proceed'}}</span>
       </div>
     </md-toolbar>
-    <md-toolbar ng-show="parkForm.$invalid" layout="row" class="md-warn">
+    <md-toolbar ng-show="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid " layout="row" class="md-warn">
       <div class="md-toolbar-tools">
-        <span ng-show="parkForm.$invalid">Incomplete</span>
+        <span ng-show="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid ">Incomplete</span>
       </div>
     </md-toolbar>      
     <br/>
     <div>
-      <md-button style="width:95%" ng-disabled="parkForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin || app.data.personnel.length < 1" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
-      <md-tooltip ng-if="parkForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin">{{app.user.email != app.data.preparer ? 'You cannot edit an entry you did not create' : 'All required fields must be entered before submitting'}}</md-tooltip>
+      <md-button style="width:95%" ng-disabled="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin || app.data.personnel.length < 1" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
+      <md-tooltip ng-if="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid  || (app.user.email != app.data.preparer ) && !app.user.admin">{{app.user.email != app.data.preparer ? 'You cannot edit an entry you did not create' : 'All required fields must be entered before submitting'}}</md-tooltip>
     </div>
     <div>
       <md-button style="width:95%" class="md-warn md-raised" ng-click="app.clear()">Clear</md-button>       
@@ -46,7 +46,6 @@
   <md-content flex id="content">
     <div ng-cloak>
       <md-content>
-        <form novalidate name="parkForm">
           <md-tabs md-dynamic-height md-border-bottom md-selected="app.selectedTab">
             <md-tab label="instructions">
               <md-content class="md-padding">
@@ -58,6 +57,7 @@
             </md-tab>
             <md-tab label="general information">
               <md-content>
+              <form novalidate name="infoForm">
                 <md-input-container class="md-block" >
                   <label>Program Area</label>
                   <md-select ng-required="true" ng-model="app.data.programArea" ng-change="app.programSelected = true" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
@@ -109,15 +109,21 @@
                 <md-input-container class="md-block" >
                   <label>Prepared By</label>
                   <input ng-disabled="true" ng-model="app.data.preparer"  ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
-                </md-input-container>                
+                </md-input-container>  
+                </form>                
               </md-content>
               <div layout="row" layout-wrap>
-                <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>                
-                <md-button class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>              
-              </div>            
+                <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>
+                <div>               
+                  <md-button ng-disabled="infoForm.$invalid" class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>
+                  <md-tooltip ng-if="infoForm.$invalid">All required inputs are not set for this tab</md-tooltip>
+                </div>                          
+              </div> 
+        
             </md-tab>
-            <md-tab label="revenue estimates">
+            <md-tab label="revenue estimates" ng-disabled="infoForm.$invalid">
               <md-content class="md-padding">
+              <form novalidate name="revenueForm">              
                 <div flex-gt-sm="50" layout="row">
                   <md-checkbox ng-model="app.data.newProgram" aria-label="Is this a new program?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                     Is this a new program?
@@ -182,13 +188,18 @@
                   <input ng-min="0" type="number" ng-model="app.data.altRevAmt" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                 </md-input-container>
                 <div layout="row" layout-wrap>
-                  <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>                
-                  <md-button class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>              
-                </div>                
+                  <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>
+                  <div>             
+                    <md-button ng-disabled="revenueForm.$invalid" class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button> 
+                    <md-tooltip ng-if="revenueForm.$invalid">All required inputs are not set for this tab</md-tooltip>
+                  </div>
+                </div>
+              </form>                
               </md-content>
             </md-tab>
-            <md-tab label="cost estimates">
+            <md-tab label="cost estimates" ng-disabled="revenueForm.$invalid">
               <md-content class="md-padding">
+                <form novalidate name="costForm">
                 <h2>Supplies</h2>
                 <md-input-container class="md-block" >
                   <label>Description</label>
@@ -268,6 +279,7 @@
                 <div layout="row" layout-wrap>
                   <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>
                 </div>
+                </form>
               </md-content>
             </md-tab>
             <md-tab label="history" md-on-select="app.getHistory()">
@@ -403,6 +415,5 @@
           </md-content>
         </md-tab>                        
       </md-tabs>
-    </form>
   </md-content>
 </div>
