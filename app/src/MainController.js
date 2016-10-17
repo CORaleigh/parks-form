@@ -265,6 +265,14 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
                 $state.go('form.id', {
                     id: self.id
                 });
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Program Submitted')
+                        .textContent('Your program has been successfully submitted.')
+                        .ariaLabel('Program Submitted')
+                        .ok('Continue')
+                );
             } else {
                 $state.go('login', {
                     message: response.data.message
