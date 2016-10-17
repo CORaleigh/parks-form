@@ -10,7 +10,7 @@ function ResetController($http, $state, $stateParams, $mdToast) {
     self.reset = function (credentials) {
         credentials.email = credentials.email.toLowerCase();
         credentials.token = $stateParams.token;
-        $http.post('http://mapstest.raleighnc.gov/parks-form-api/reset', credentials).then(function (result) {
+        $http.post('http://localhost:8081/parks-form-api/reset', credentials).then(function (result) {
             if (result.data.success) {
                 $state.go('login', {user: result.data.user});
             } else {

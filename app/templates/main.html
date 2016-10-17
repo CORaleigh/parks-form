@@ -207,7 +207,6 @@
                   </div>
                 </md-input-container>
                 <h2>Personnel Types</h2>
-                <md-button class="md-raised md-primary" ng-click="app.addPersonnel()" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">Add</md-button>
                 <md-card ng-repeat="type in app.data.personnel | orderBy: 'name'" class="personnelCard">
                   <md-toolbar md-scroll-shrink ng-if="true">
                     <div class="md-toolbar-tools">
@@ -263,6 +262,7 @@
                     </md-card-actions>
                   </div>
                 </md-card>
+                <md-button class="md-raised md-primary" ng-click="app.addPersonnel()" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">Add</md-button>                
                 <div layout="row" layout-wrap>
                   <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>                
                   <md-button class="md-primary" type="button" ng-click="app.nextTab()">Next >></md-button>              

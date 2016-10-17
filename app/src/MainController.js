@@ -16,7 +16,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     }
 
 
-    var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+    var api = 'http://localhost:8081/parks-form-api/';
     var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
     var token = creds.token;
     self.user = creds.user;
