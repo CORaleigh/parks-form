@@ -303,7 +303,10 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         }
         if (self.filter.to) {
             where.start.$lte = formatDate(self.filter.to);
-        }        
+        }
+        if (!self.filter.to && !self.filter.from) {
+            delete where.start;
+        }
         if (self.filter.programArea) {
             where.programArea = self.filter.programArea.name;
         }
