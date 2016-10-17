@@ -32,6 +32,11 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     }, {
         name: "Hourly"
     }];
+    self.supplyTypes = [{
+        name: "Lump Sum"
+    }, {
+        name: "Per Student"
+    }]
     self.statuses = [{
         name: "Contractor"
     }, {
@@ -174,8 +179,11 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         if (isNaN(value)) {
             value = 0;
         }
-        if (self.data.supplyAmt) {
+        if (self.data.supplyAmt && self.data.supplyType) {
             value += self.data.supplyAmt;
+            if (self.data.supplyType.name === 'Per Student') {
+                value += self.data.supplyAmt * self.data.minParticipants;
+            }
         }
         if (self.data.programArea === 'Athletics') {
             value *= 1.4256;
@@ -184,6 +192,12 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         }
         self.costEstimate = value;
         return value;
+    };
+    self.supplyTypeChanged = function () {
+        if (self.data.supplyType === 'None') {
+            self.data.supplyType = null;
+            self.data.supplyAmt = null;
+        }
     };
     //personnel functions
     self.addPersonnel = function () {
@@ -227,6 +241,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             altRevDesc: self.data.altRevDesc,
             altRevAmt: self.data.altRevAmt,
             supplyDesc: self.data.supplyDesc,
+            supplyType: self.data.supplyType,
             supplyAmt: self.data.supplyAmt,
             personnel: JSON.stringify(self.data.personnel),
             submitted: new Date(),
