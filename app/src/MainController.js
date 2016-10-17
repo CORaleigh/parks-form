@@ -32,11 +32,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     }, {
         name: "Hourly"
     }];
-    self.supplyTypes = [{
-        name: "Lump Sum"
-    }, {
-        name: "Per Student"
-    }]
+    self.supplyTypes = ["Lump Sum", "Per Student"];
     self.statuses = [{
         name: "Contractor"
     }, {
@@ -181,7 +177,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         }
         if (self.data.supplyAmt && self.data.supplyType) {
             value += self.data.supplyAmt;
-            if (self.data.supplyType.name === 'Per Student') {
+            if (self.data.supplyType === 'Per Student') {
                 value += self.data.supplyAmt * self.data.minParticipants;
             }
         }
@@ -430,6 +426,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
 
     //handle select button click
     self.selectEntry = function (entry, isCopy) {
+        console.log(entry);
         // location.skipReload().path(entry._id);
         $state.go('form.id', {
             id: entry._id
@@ -455,6 +452,9 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         self.data.altRevDesc = entry.altRevDesc;
         self.data.supplyAmt = entry.supplyAmt;
         self.data.supplyDesc = entry.supplyDesc;
+        if (entry.supplyType) {
+            self.data.supplyType = entry.supplyType;
+        }
         self.data.personnel = entry.personnel;
         if (!isCopy) {
             self.selectedTab = 1;
