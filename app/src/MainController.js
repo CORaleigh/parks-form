@@ -304,6 +304,11 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
                     $regex: ".*" + self.filter.title + ".*",
                     $options: "i"
                 }
+            }, {
+                preparer: {
+                    $regex: ".*" + self.filter.title + ".*",
+                    $options: "i"
+                }
             }];
         }
         $http.get(api + "form", {
