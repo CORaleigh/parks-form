@@ -293,14 +293,17 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     //get all entries when History tab selected
     self.getHistory = function () {
         var where = {
-            submitted: {}
+            start: {}
         };
         if (self.filter.me) {
             where.preparer = self.user.email;
         }
         if (self.filter.from) {
-            where.submitted.$gte = formatDate(self.filter.from);
+            where.start.$gte = formatDate(self.filter.from);
         }
+        if (self.filter.to) {
+            where.start.$lte = formatDate(self.filter.to);
+        }        
         if (self.filter.programArea) {
             where.programArea = self.filter.programArea.name;
         }
