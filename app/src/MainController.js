@@ -62,7 +62,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     self.filter = {
         me: true,
         from: lastYear,
-        to: tomorrow,
+        to: null,
         title: ""
     };
     self.showFilter = true;
