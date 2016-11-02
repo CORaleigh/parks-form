@@ -553,15 +553,15 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
                 for (j = 0; j < item.personnel.length; j += 1) {
                     personnel = item.personnel[j];
                     result += '"' + personnel.title + '"';
-                    result += '"' + columnDelimiter + '"';
+                    result += columnDelimiter;
                     result += '"' + personnel.payType + '"';
-                    result += '"' + columnDelimiter + '"';
+                    result += columnDelimiter;
                     result += '"' + personnel.status + '"';
-                    result += '"' + columnDelimiter + '"';
+                    result += columnDelimiter;
                     result += '"' + personnel.rate + '"';
-                    result += '"' + columnDelimiter + '"';
+                    result += columnDelimiter;
                     result += '"' + personnel.count + '"';
-                    result += '"' + columnDelimiter + '"';
+                    result += columnDelimiter;
                 }
             }
             result += lineDelimiter;
