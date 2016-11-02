@@ -643,6 +643,9 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         }, {
             field: 'recoveryProjected',
             display: 'Cost Recovery (projected)'
+        }, {
+            field: 'needsReview',
+            display: 'Needs Review'
         }];
         var data, filename, link;
         var csv = convertCsv(self.history, headers);
