@@ -325,7 +325,7 @@
                   </div>
                   <div layout="row" layout-wrap ng-show="app.showFilter">
                     <md-input-container class="md-block" style="min-width: 200px;">
-                      <label>Title or Facility</label>
+                      <label>Title or Facility or Email Address</label>
                       <input ng-change="app.titleFilterChanged(app.filter.title)" ng-model="app.filter.title" placeholder="Contains this text"></input>
                     </md-input-container>              
                     <md-checkbox class="filter-check" layout="row" layout-wrap ng-model="app.filter.me" aria-label="Created by me" ng-change="app.getHistory()">
