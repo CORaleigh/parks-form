@@ -6,6 +6,8 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     'use strict';
     var self = this;
 
+
+
     if (!$window.sessionStorage.getItem('credentials')) {
         $state.go('login');
         return false;
@@ -44,7 +46,9 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         target: {},
         personnel: [{
             visible: true,
-            cost: null
+            cost: null,
+            hours: 0,
+            hourType: 'additional'
         }],
         cityFacility: true,
         full: false,
@@ -158,12 +162,19 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     self.calcCost = function () {
         var personnel = {};
         var value = 0;
+        var hours = 0;
         var i;
         for (i = 0; i < self.data.personnel.length; i += 1) {
             personnel = self.data.personnel[i];
             personnel.cost = null;
             if (personnel.payType === 'Hourly') {
-                personnel.cost = personnel.rate * personnel.count * (self.data.weeks * self.data.hours);
+                hours = self.data.weeks * self.data.hours;
+                if (personnel.hourType === 'additional') {
+                    hours += personnel.hours;
+                } else if (personnel.hourType === 'total') {
+                    hours = personnel.hours;
+                }
+                personnel.cost = personnel.rate * personnel.count * hours;
             } else if (personnel.payType === 'Per Student') {
                 personnel.cost = personnel.rate * personnel.count * self.data.minParticipants;
             }
@@ -198,7 +209,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     //personnel functions
     self.addPersonnel = function () {
         var i;
-        self.data.personnel.unshift({});
+        self.data.personnel.unshift({hours: 0, hourType: 'additional'});
         for (i = 0; i < self.data.personnel.length; i += 1) {
             self.data.personnel[i].visible = (i === 0);
         }
@@ -664,5 +675,28 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     self.nextTab = function () {
         self.selectedTab += 1;
     };
+     self.tabSelected = function () {
+         $timeout(function () {
+            
+    //         var inputs = document.getElementsByClassName("ng-untouched");
+    //         for (var i = 0; i < inputs.length; i++) {
+    //             var input = inputs[i];
+    //             input.classList.remove("ng-untouched");
+    //             input.classList.add("ng-touched");
+    //         }
+    //         var containers = document.getElementsByTagName("md-input-container");
+    //         for (var i = 0; i < containers.length; i++) {
+    //             var inputs = containers[i].getElementsByClassName("ng-invalid");
+    //             if (inputs.length > 0) {
+                    
+    //                 var selects = containers[i].getElementsByTagName("md-select");
+    //                 if (selects.length === 0) {
+    //                     containers[i].classList.add("md-input-invalid");
+    //                 }
+
+    //             }
+    //         }
+         });
+     };    
 }
 export default ['$http', '$filter', '$rootScope', '$scope', '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', '$window', MainController];

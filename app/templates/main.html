@@ -64,52 +64,68 @@
                 </div>              
               </md-content>
             </md-tab>
-            <md-tab label="general information">
+            <md-tab label="general information" md-on-select="app.tabSelected()">
               <md-content>
-              <form novalidate name="infoForm">
+              <form name="infoForm">
                 <md-input-container class="md-block" >
                   <label>Program Area</label>
-                  <md-select ng-required="true" ng-model="app.data.programArea" ng-change="app.programSelected = true" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <md-select name="programArea" ng-required="true" ng-model="app.data.programArea" ng-change="app.programSelected = true" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin"  ng-init="app.initInput($element)">
 
                     <md-option ng-repeat="program in app.programs | orderBy: 'name'" ng-value="program">
                       {{program.name}}
                     </md-option>
                   </md-select>
+                  <div ng-messages="infoForm.programTitle.$error" ng-if="infoForm.programArea.$error">
+                    <div ng-message="required" ng-if="infoForm.programArea.$error.required">This is required!</div>
+                  </div>                     
                 </md-input-container>
 
                 <md-input-container class="md-block" >
                   <label>Program Title</label>
-                  <input ng-required="true" ng-model="app.data.title" placeholder="What is your program called?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <input name="programTitle" required ng-model="app.data.title" placeholder="What is your program called?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin" md-minlength="10"/>
+                  <div ng-messages="infoForm.programTitle.$error" ng-if="infoForm.programTitle.$error">
+                    <div ng-message="required" ng-if="infoForm.programTitle.$error.required">This is required!</div>
+                  </div>                  
                 </md-input-container>
-
                 <md-input-container class="md-block" >
                   <label>Category of Service</label>
-                  <md-select ng-required="true" ng-model="app.data.service">
-
+                  <md-select name="category" ng-required="true" ng-model="app.data.service">
                     <md-option ng-repeat="service in app.services | orderBy: 'name'" ng-value="service">
                       {{service.name}}
                     </md-option>
                   </md-select>
+                  <div ng-messages="infoForm.category.$error" ng-if="infoForm.category.$error">
+                    <div ng-message="required" ng-if="infoForm.category.$error.required">This is required!</div>
+                  </div>                     
                 </md-input-container>
                 <md-checkbox ng-model="app.data.cityFacility" aria-label="Is this a City facility?" ng-change="app.data.facility = null" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                   Is this a City facility?
                 </md-checkbox>              
                 <md-input-container ng-if="app.data.cityFacility" class="md-block" >
                   <label>Facility Name</label>
-                  <md-select ng-required="true" ng-model="app.data.facility" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <md-select name="facility" ng-required="true" ng-model="app.data.facility" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
 
                     <md-option ng-repeat="facility in app.facilities | orderBy: 'name'" ng-value="facility">
                       {{facility.name}}
                     </md-option>
-                  </md-select>                  
+                  </md-select>  
+                  <div ng-messages="infoForm.facility.$error" ng-if="infoForm.facility.$error">
+                    <div ng-message="required" ng-if="infoForm.facility.$error.required">This is required!</div>
+                  </div>                                      
                 </md-input-container>
                 <md-input-container ng-if="!app.data.cityFacility" class="md-block" >
                   <label>Facility Name</label>
-                  <input ng-required="true" ng-model="app.data.facility.name" placeholder="Enter the facility name" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <input name="facilityName" ng-required="true" ng-model="app.data.facility.name" placeholder="Enter the facility name" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <div ng-messages="infoForm.facilityName.$error" ng-if="infoForm.facilityName.$error">
+                    <div ng-message="required" ng-if="infoForm.facilityName.$error.required">This is required!</div>
+                  </div>                     
                 </md-input-container>                
                 <md-input-container class="md-block">
                   <label>Start Date</label>
-                  <md-datepicker ng-required="true" ng-model="app.data.start" name="dateField" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin"></md-datepicker>
+                  <md-datepicker name="startDate" ng-required="true" ng-model="app.data.start" name="dateField" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin"></md-datepicker>
+                  <div ng-messages="infoForm.startDate.$error" ng-if="infoForm.startDate.$error">
+                    <div ng-message="required" ng-if="infoForm.startDate.$error.required">This is required!</div>
+                  </div>                     
                 </md-input-container>
                 <md-input-container class="md-block" >
                   <label>Comments</label>
@@ -130,9 +146,9 @@
               </div> 
         
             </md-tab>
-            <md-tab label="revenue estimates" ng-disabled="infoForm.$invalid">
+            <md-tab label="revenue estimates" ng-disabled="infoForm.$invalid" ng-on-select="app.tabSelected()">
               <md-content class="md-padding">
-              <form novalidate name="revenueForm">              
+              <form name="revenueForm">              
                 <div flex-gt-sm="50" layout="row">
                   <md-checkbox ng-model="app.data.newProgram" aria-label="Is this a new program?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                     Is this a new program?
@@ -142,16 +158,22 @@
                   </md-checkbox>                
                 </div>           
                 <h2>Program Length</h2>
-                <md-input-container >
+                <md-input-container>
                   <label>Hours Per Week</label>
-                  <input ng-required="true" ng-min="0" type="number" ng-model="app.data.hours" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <input name="hoursPerWeek" ng-required="true" ng-min="0" type="number" ng-model="app.data.hours" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <div ng-messages="revenueForm.hoursPerWeek.$error" ng-if="revenueForm.hoursPerWeek.$error">
+                    <div ng-message="required" ng-if="revenueForm.hoursPerWeek.$error.required">This is required!</div>
+                  </div>                      
                 </md-input-container>
 
                 <md-input-container class="">
                   <label>Length of Program in Weeks</label>
                   <div layout="row">
                     <div flex>
-                      <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.weeks" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                      <input name="length" ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.weeks" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                      <div ng-messages="revenueForm.length.$error" ng-if="revenueForm.length.$error">
+                        <div ng-message="required" ng-if="revenueForm.length.$error.required">This is required!</div>
+                      </div>                       
                     </div>
                     <div flex>
                       <md-button class="md-icon-button" >
@@ -169,17 +191,26 @@
                 <h2>Participants Estimate</h2>
                 <md-input-container class="" >
                   <label>Minimum # of Participants</label>
-                  <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.minParticipants" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <input name="minPart" ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.minParticipants" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <div ng-messages="revenueForm.minPart.$error" ng-if="revenueForm.minPart.$error">
+                    <div ng-message="required" ng-if="revenueForm.minPart.$error.required">This is required!</div>
+                  </div>                     
                 </md-input-container>
                 <md-input-container class="" >
                   <label>Maximum # of Participants</label>
-                  <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.maxParticipants" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <input name="maxPart" ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.maxParticipants" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <div ng-messages="revenueForm.maxPart.$error" ng-if="revenueForm.maxPart.$error">
+                    <div ng-message="required" ng-if="revenueForm.maxPart.$error.required">This is required!</div>
+                  </div>                     
                 </md-input-container>
                 <h2>Fee Estimate</h2>
                 <md-input-container class="" >
                   <label>Resident Rate</label>
                   <md-icon md-svg-icon="dollar" class="email"></md-icon>
-                  <input ng-required="true" ng-min="0" ng-change="app.residentialRateChanged(app.data.residentialRate)" type="number" ng-model="app.data.residentialRate" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <input name="feeEst" ng-required="true" ng-min="0" ng-change="app.residentialRateChanged(app.data.residentialRate)" type="number" ng-model="app.data.residentialRate" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  <div ng-messages="revenueForm.feeEst.$error" ng-if="revenueForm.feeEst.$error">
+                    <div ng-message="required" ng-if="revenueForm.feeEst.$error.required">This is required!</div>
+                  </div>                    
                 </md-input-container>
                 <div>  
                   <label>Non-Resident Rate</label>
@@ -208,7 +239,7 @@
             </md-tab>
             <md-tab label="cost estimates" ng-disabled="revenueForm.$invalid">
               <md-content class="md-padding">
-                <form novalidate name="costForm">
+                <form name="costForm">
                 <h2>Supplies</h2>
                 <md-input-container class="md-block" >
                   <label>Description</label>
@@ -216,17 +247,23 @@
                 </md-input-container>
                 <md-input-container class="md-block" >
                   <label>Supply Cost Type</label>
-                  <md-select ng-required="app.data.supplyAmt" ng-model="app.data.supplyType" ng-change="app.supplyTypeChanged()">
+                  <md-select name="costType" ng-required="app.data.supplyAmt" ng-model="app.data.supplyType" ng-change="app.supplyTypeChanged()">
                     <md-option><em>None</em></md-option>
                     <md-option ng-repeat="type in app.supplyTypes" ng-value="type">
                       {{type}}
                     </md-option>
                   </md-select>
+                  <div ng-messages="costForm.costType.$error" ng-if="costForm.costType.$error">
+                    <div ng-message="required" ng-if="costForm.costType.$error.required">This is required!</div>
+                  </div>                       
                 </md-input-container>                
                 <md-input-container class="" >
                   <label>Amount</label>
                     <md-icon md-svg-icon="dollar"></md-icon>
-                    <input ng-required="app.data.supplyType" ng-min="0" type="number" ng-model="app.data.supplyAmt" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                    <input name="costAmt" ng-required="app.data.supplyType" ng-min="0" type="number" ng-model="app.data.supplyAmt" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                    <div ng-messages="costForm.costAmt.$error" ng-if="costForm.costAmt.$error">
+                      <div ng-message="required" ng-if="costForm.costAmt.$error.required">This is required!</div>
+                    </div>                     
                   </md-input-container>
                 <h2>Personnel Types</h2>
                 <md-card ng-repeat="type in app.data.personnel | orderBy: 'name'" class="personnelCard">
@@ -245,39 +282,65 @@
                     <md-card-content>
                       <md-input-container class="md-block" >
                         <label>Job Title</label>
-                        <md-select ng-required="true" ng-model="app.data.personnel[$index].title" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        <md-select name="jobTitle{{$index}}" ng-required="true" ng-model="app.data.personnel[$index].title" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
 
                           <md-option ng-repeat="job in app.jobs" ng-value="job.name">
                             {{job.name}}
                           </md-option>
                         </md-select>
+                        <div ng-messages="costForm['jobTitle' + $index].$error" ng-if="costForm['jobTitle' + $index].$error">
+                          <div ng-message="required" ng-if="costForm['jobTitle' + $index].$error.required">This is required!</div>
+                        </div>                         
                       </md-input-container>
                       <md-input-container class="md-block" >
                         <label>Pay Type</label>
-                        <md-select ng-required="true" ng-model="app.data.personnel[$index].payType" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        <md-select name="payType{{$index}}" ng-required="true" ng-model="app.data.personnel[$index].payType" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
 
                           <md-option ng-repeat="type in app.payTypes" ng-value="type.name">
                             {{type.name}}
                           </md-option>
                         </md-select>
+                        <div ng-messages="costForm['payType' + $index].$error" ng-if="costForm['payType' + $index].$error">
+                          <div ng-message="required" ng-if="costForm['payType' + $index].$error.required">This is required!</div>
+                        </div>                          
                       </md-input-container>
                       <md-input-container class="md-block" >
                         <label>Status</label>
-                        <md-select ng-required="true" ng-model="app.data.personnel[$index].status" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        <md-select name="status{{$index}}" ng-required="true" ng-model="app.data.personnel[$index].status" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                           <md-option ng-repeat="status in app.statuses" ng-value="status.name">
                             {{status.name}}
                           </md-option>
                         </md-select>
+                        <div ng-messages="costForm['status' + $index].$error" ng-if="costForm['status' + $index].$error">
+                          <div ng-message="required" ng-if="costForm['status' + $index].$error.required">This is required!</div>
+                        </div>                            
                       </md-input-container>
                       <md-input-container class="" >
                         <label>Pay Rate</label>
                         <md-icon md-svg-icon="dollar" class="email"></md-icon>
-                        <input ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].rate" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        <input name="payRate{{$index}}" ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].rate" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                         <div ng-messages="costForm['payRate' + $index].$error" ng-if="costForm['payRate' + $index].$error">
+                            <div ng-message="required" ng-if="costForm['payRate' + $index].$error.required">This is required!</div>
+                          </div>                         
                       </md-input-container> 
                       <md-input-container class="" >
                         <label>Personnel Count</label>
-                        <input ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].count" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                        <input name="personCnt{{$index}}" ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].count" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                         <div ng-messages="costForm['personCnt' + $index].$error" ng-if="costForm['personCnt' + $index].$error">
+                            <div ng-message="required" ng-if="costForm['personCnt' + $index].$error.required">This is required!</div>
+                          </div>
                       </md-input-container>
+                      <md-radio-group ng-model="app.data.personnel[$index].hourType" ng-if="app.data.personnel[$index].payType === 'Hourly'">
+                        <md-radio-button value="additional">Additional Hours</md-radio-button>
+                        <md-radio-button value="total">Total Hours</md-radio-button>
+                      </md-radio-group>
+                      <md-input-container class="" ng-if="app.data.personnel[$index].payType === 'Hourly'" >
+                        <label>Hours</label>
+                        <input name="hours{{$index}}" ng-pattern="/^\d+$/" ng-required="true" ng-min="0" type="number" ng-model="app.data.personnel[$index].hours" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                         <div ng-messages="costForm['hours' + $index].$error" ng-if="costForm['hours' + $index].$error">
+                            <div ng-message="required" ng-if="costForm['hours' + $index].$error.required">This is required!</div>
+                          </div>
+                      </md-input-container>                      
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">
                       <md-button class="md-warn md-raised" ng-click="app.removePersonnel($index)" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">Remove</md-button>
