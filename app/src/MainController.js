@@ -187,9 +187,11 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             value = 0;
         }
         if (self.data.supplyAmt && self.data.supplyType) {
-            value += self.data.supplyAmt;
+
             if (self.data.supplyType === 'Per Student') {
                 value += self.data.supplyAmt * self.data.minParticipants;
+            } else {
+                value += self.data.supplyAmt;
             }
         }
         if (self.data.programArea === 'Athletics') {
@@ -677,7 +679,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     };
      self.tabSelected = function () {
          $timeout(function () {
-            
+
     //         var inputs = document.getElementsByClassName("ng-untouched");
     //         for (var i = 0; i < inputs.length; i++) {
     //             var input = inputs[i];
@@ -688,7 +690,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     //         for (var i = 0; i < containers.length; i++) {
     //             var inputs = containers[i].getElementsByClassName("ng-invalid");
     //             if (inputs.length > 0) {
-                    
+
     //                 var selects = containers[i].getElementsByTagName("md-select");
     //                 if (selects.length === 0) {
     //                     containers[i].classList.add("md-input-invalid");
@@ -697,6 +699,6 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
     //             }
     //         }
          });
-     };    
+     };
 }
 export default ['$http', '$filter', '$rootScope', '$scope', '$timeout', '$state', '$stateParams', '$mdDialog', '$mdMedia', '$window', MainController];
