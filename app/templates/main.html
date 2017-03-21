@@ -343,11 +343,11 @@
                       </md-input-container>                      
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">
-                      <md-button class="md-warn md-raised" ng-click="app.removePersonnel($index)" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">Remove</md-button>
+                      <md-button class="md-warn md-raised" ng-click="app.removePersonnel($index)" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">Remove Staff</md-button>
                     </md-card-actions>
                   </div>
                 </md-card>
-                <md-button class="md-raised md-primary" ng-click="app.addPersonnel()" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">Add</md-button>                
+                <md-button class="md-raised md-primary" ng-click="app.addPersonnel()" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">Add Staff</md-button>                
                 <div layout="row" layout-wrap>
                   <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>
                 </div>
