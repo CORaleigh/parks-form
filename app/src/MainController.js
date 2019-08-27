@@ -663,8 +663,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         var data, filename, link;
         var csv = convertCsv(self.history, headers);
         filename = 'pricingForm.csv';
-        csv = 'data:text/csv;charset=utf-8,' + csv;
-        data = encodeURI(csv);
+        data = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
         link = document.createElement('a');
         link.setAttribute('href', data);
         link.setAttribute('download', filename);
