@@ -7,7 +7,7 @@ function SignupController($http, $state, $mdToast) {
     var self = this;
     self.signup = function (credentials) {
         credentials.email = credentials.email.toLowerCase();
-        $http.post('http://mapstest.raleighnc.gov/parks-form-api/signup', credentials).then(function (result) {
+        $http.post('https://gis.raleighnc.gov/parks-form-api/signup', credentials).then(function (result) {
             if (result.data.success) {
                 $state.go('login', {email: credentials.email});
             } else {

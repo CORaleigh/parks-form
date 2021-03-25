@@ -8,7 +8,7 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
         $state.go('login');
         return false;
     }
-    var api = 'http://mapstest.raleighnc.gov/parks-form-api/';
+    var api = 'https://gis.raleighnc.gov/parks-form-api/';
     var creds = JSON.parse($window.sessionStorage.getItem('credentials'));
     var token = creds.token;
     self.user = creds.user;
@@ -73,7 +73,10 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
             if (self.newFacility) {
                 var url = api + "facilities";
                 $http.post(url, {name: self.newFacility, token: token}).then(function (response) {
-                    self.facilities.push({name: self.newFacility, _id: response._id});
+                    
+                    console.log(response);
+
+                    self.facilities.push({name: self.newFacility, _id: response.data.results._id});
                     self.newFacility = null;
                 });
             }
@@ -82,7 +85,7 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
             if (self.newProgram) {
                 var url = api + "programs";
                 $http.post(url, {name: self.newProgram, token: token}).then(function (response) {
-                    self.programs.push({name: self.newProgram, _id: response.data._id});
+                    self.programs.push({name: self.newProgram, _id: response.data.results._id});
                     self.newProgram = null;
                 });
             }
@@ -90,8 +93,8 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
         self.addService = function () {
             if (self.newServiceName && self.newServiceValue) {
                 var url = api + "services";///" + service._id;
-                $http.post(url, {name: self.newServiceName, value: self.newServiceValue / 100, token: token}).then(function () {
-                    self.services.push({name: self.newServiceName, value: self.newServiceValue});
+                $http.post(url, {name: self.newServiceName, value: self.newServiceValue / 100, token: token}).then(function (response) {
+                    self.services.push({name: self.newServiceName, value: self.newServiceValue, _id: response.data.results._id});
                     self.newServiceName = null;
                     self.newServiceValue = null;
                 });
@@ -105,8 +108,8 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
         self.addJob = function () {
             if (self.newJob) {
                 var url = api + "jobs";
-                $http.post(url, {name: self.newJob, token: token}).then(function () {
-                    self.jobs.push({name: self.newJob});
+                $http.post(url, {name: self.newJob, token: token}).then(function (response) {
+                    self.jobs.push({name: self.newJob, _id: response.data.results._id});
                     self.newJob = null;
                 });
             }
@@ -186,6 +189,7 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
             });
         };
         self.deleteUser = function (user) {
+            debugger
             $http({
                 method: 'DELETE',
                 url: api + 'users/' + user._id,
@@ -197,6 +201,7 @@ function AdminController($http, $stateParams, $state, $mdDialog, $window) {
             });
         };
         self.changeAdmin = function (user) {
+            debugger
             var url = api + "users/" + user._id;
             $http.post(url, {admin: user.admin, token: token});
         };
