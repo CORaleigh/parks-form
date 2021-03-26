@@ -98,6 +98,9 @@
                     <div ng-message="required" ng-if="infoForm.category.$error.required">This is required!</div>
                   </div>                     
                 </md-input-container>
+                <md-checkbox ng-model="app.data.dropins" aria-label="Does this program allow drop-ins?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
+                  Does this program allow drop-ins?
+                </md-checkbox>                        
                 <md-checkbox ng-model="app.data.cityFacility" aria-label="Is this a City facility?" ng-change="app.data.facility = null" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                   Is this a City facility?
                 </md-checkbox>              

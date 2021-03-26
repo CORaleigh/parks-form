@@ -234,6 +234,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             programArea: self.data.programArea.name,
             title: self.data.title,
             category: self.data.service,
+            dropins: self.data.dropins,
             cityFacility: self.data.cityFacility,
             facility: self.data.facility.name,
             start: self.data.start,
@@ -589,6 +590,9 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         }, {
             field: 'programArea',
             display: 'Program Area'
+        }, {
+            field: 'dropins',
+            display: 'Drop-Ins'
         }, {
             field: 'category',
             subField: 'name',
