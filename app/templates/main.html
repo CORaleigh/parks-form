@@ -1,6 +1,6 @@
   <div flex layout="row" ng-controller="MainController as app">
     <!-- Container #3 -->
-    <md-sidenav class="md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-sm')"
+    <md-sidenav  md-is-locked-open="$mdMedia('gt-sm')"
     md-component-id="left" ng-click="app.toggleList()">
     <md-list>
       <md-list-item>
@@ -34,7 +34,7 @@
     </md-toolbar>      
     <br/>
     <div>
-      <md-button style="width:95%" ng-disabled="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin || app.data.personnel.length < 1" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
+      <md-button style="width:95%" ng-disabled="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid || (app.user.email != app.data.preparer ) && !app.user.admin" class="md-primary md-raised" ng-click="app.submit()">{{app.id ? 'Update': 'Submit'}}</md-button>
       <md-tooltip ng-if="infoForm.$invalid || revenueForm.$invalid || costForm.$invalid  || (app.user.email != app.data.preparer ) && !app.user.admin">{{app.user.email != app.data.preparer ? 'You cannot edit an entry you did not create' : 'All required fields must be entered before submitting'}}</md-tooltip>
     </div>
     <div>
@@ -159,7 +159,13 @@
                   <md-checkbox ng-model="app.data.full" aria-label="Is this program usually full?" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                     Is this program usually full?
                   </md-checkbox>                
-                </div>           
+                </div>      
+                <h2>Admin Fee</h2>
+                <md-input-container class="">
+                  <label>Admin Fee</label>
+                  <md-icon md-svg-icon="dollar" class="email"></md-icon>                  
+                  <input ng-model="app.data.adminFee" type="number" ng-model="app.data.altRevAmt" placeholder="" ng-disabled="true">
+                </md-input-container>                     
                 <h2>Program Length</h2>
                 <md-input-container>
                   <label>Hours Per Week</label>
@@ -230,6 +236,7 @@
                   <md-icon md-svg-icon="dollar" class="email"></md-icon>                  
                   <input ng-min="0" type="number" ng-model="app.data.altRevAmt" placeholder="" ng-disabled="(app.user.email != app.data.preparer) && !app.user.admin">
                 </md-input-container>
+           
                 <div layout="row" layout-wrap>
                   <md-button class="md-primary" type="button" ng-click="app.backTab()"><< Back</md-button>
                   <div>             
@@ -427,7 +434,7 @@
                             Copy
                           </md-button>
                         </md-menu-item>
-                        <md-menu-item>
+                        <md-menu-item  ng-if="app.user.admin || app.user.email === app.data.preparer">
                           <md-button ng-click="app.selectEntry(entry)">
                             Select                              
                           </md-button>

@@ -24,12 +24,13 @@
 
 <body ng-cloak layout="column" ng-controller="AppController as app">
   <!-- Container #1 (see wireframe) -->
-  <md-toolbar layout="row" class="md-toolbar-tools">
+  <md-toolbar layout="row" id="header" class="md-toolbar-tools">
     <div class="md-toolbar-tools">
       <md-button ng-if="'form' | includedByState" class="menu md-icon-button" hide-gt-sm ng-click="app.toggleList()"
       aria-label="Show User List">
       <md-icon md-svg-icon="menu"></md-icon>
     </md-button>
+    <img src="https://raleighnc.gov/themes/custom/cityofraleigh/logo.svg" alt="logo" id="logo">
     <h1>PRCR Experience - Pricing Form</h1>
     <span flex></span>
     <div ng-if="app.$state.current.name.indexOf('admin') > - 1 || app.$state.current.name.indexOf('form') > - 1">

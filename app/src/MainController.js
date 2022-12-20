@@ -44,16 +44,18 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         default: true,
         preparer: self.user.email,
         target: {},
-        personnel: [{
-            visible: true,
-            cost: null,
-            hours: 0,
-            hourType: 'additional'
-        }],
+        personnel: [
+        //{     visible: true,
+        //     cost: null,
+        //     hours: 0,
+        //     hourType: 'additional'
+        // }
+        ],
         cityFacility: true,
         full: false,
         newProgram: false,
-        comments: ''
+        comments: '',
+        adminFee: 1
     };
     self.costEstimate = 0;
     self.revenueEstimate = 0;
@@ -156,6 +158,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         if (self.data.altRevAmt) {
             value += self.data.altRevAmt;
         }
+        value += self.data.adminFee;
         self.revenueEstimate = value;
         return value;
     };
@@ -231,6 +234,7 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
         }
         console.log(self.data);
         $http.post(url, {
+            adminFee: self.data.adminFee,
             programArea: self.data.programArea.name,
             title: self.data.title,
             category: self.data.service,
@@ -270,10 +274,10 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             }
 
             if (response.data.success) {
-                self.id = response.data.results._id;
-                self.data._id = self.id;
+                self.id = null; //response.data.results._id;
+                self.data._id = null;//self.id;
                 $state.go('form.id', {
-                    id: self.id
+                    id: null
                 });
                 $mdDialog.show(
                     $mdDialog.alert()
@@ -489,7 +493,8 @@ function MainController($http, $filter, $rootScope, $scope, $timeout, $state, $s
             cityFacility: true,
             full: false,
             newProgram: false,
-            comments: ''
+            comments: '',
+            adminFee: 1
         };
         self.id = null;
         self.selectedTab = 1;

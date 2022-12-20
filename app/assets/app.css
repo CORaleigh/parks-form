@@ -234,3 +234,62 @@ md-progress-linear {
     z-index: 1000;
   }
 }
+
+#logo {
+  height: 100%;
+  padding: 12px;
+}
+
+#header {
+  background-color: white !important;
+  color: black !important;
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.md-button.md-warn.md-raised {
+  color: rgba(255,255,255,0.87);
+  background-color: #ca3604 !important;
+}
+
+md-toolbar:not(.md-menu-toolbar).md-warn {
+  background-color: #ca3604;
+  color: rgba(255,255,255,0.87);
+}
+md-toolbar:not(.md-menu-toolbar) {
+  background-color:  #4C8C2B;
+  color: rgba(255,255,255,0.87);
+}
+
+/* .md-button.md-raised {
+  color: rgba(255,255,255,0.87);  
+  background-color: #4C8C2B !important
+}
+
+.md-button.md-primary.md-raised {
+  color: rgba(255,255,255,0.87);
+  background-color: #4C8C2B !important
+} */
+
+md-tabs.md-default-theme .md-tab.md-active, md-tabs .md-tab.md-active, md-tabs.md-default-theme .md-tab.md-active md-icon, md-tabs .md-tab.md-active md-icon, md-tabs.md-default-theme .md-tab.md-focused, md-tabs .md-tab.md-focused, md-tabs.md-default-theme .md-tab.md-focused md-icon, md-tabs .md-tab.md-focused md-icon {
+  color:  #4C8C2B !important
+}
+
+md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
+  color: #4C8C2B !important;
+  background: #4C8C2B !important;
+}
+
+.md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab, .md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary.md-raised {
+  color: rgba(255,255,255,0.87);
+  background-color: #4C8C2B;
+}
+
+md-button.md-default-theme.md-primary, .md-button.md-primary {
+  color: #4C8C2B;
+}
+
+md-checkbox.md-default-theme.md-checked .md-ink-ripple, md-checkbox.md-checked .md-ink-ripple {
+  color: #4C8C2B;
+}
