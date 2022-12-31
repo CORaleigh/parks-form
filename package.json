@@ -28,7 +28,7 @@
     }
   },
   "devDependencies": {
-    "jspm": "^0.16.45",
+    "jspm": "^2.0.0-beta.7",
     "live-server": "^1.2.1"
   },
   "scripts": {
